@@ -7,12 +7,15 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    public static final String REALM_NAME = "ng-server api";
 
     @Bean
     BasicAuthenticationFilter authenticationFilter() throws Exception {
@@ -22,18 +25,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     BasicAuthenticationEntryPoint authenticationEntryPoint() {
         BasicAuthenticationEntryPoint authenticationEntryPoint = new BasicAuthenticationEntryPoint();
-        authenticationEntryPoint.setRealmName("ng-server api");
+        authenticationEntryPoint.setRealmName(REALM_NAME);
         return authenticationEntryPoint;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/**").hasRole("USER")
-                .and()
-                .addFilter(authenticationFilter())
-                .formLogin();
+                .and().httpBasic().realmName(REALM_NAME).authenticationEntryPoint(authenticationEntryPoint())
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Autowired

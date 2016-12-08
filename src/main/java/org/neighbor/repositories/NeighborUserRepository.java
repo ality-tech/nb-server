@@ -7,7 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
-@RepositoryRestResource(collectionResourceRel = "neighbor", path = "neighbor")
+@RepositoryRestResource(collectionResourceRel = "neighbor", path = "user")
 public interface NeighborUserRepository extends CrudRepository<NeighborUser, Long> {
 
     List<NeighborUser> findByLogin(@Param("login") String login);
