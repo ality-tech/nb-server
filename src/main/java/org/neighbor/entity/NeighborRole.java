@@ -13,4 +13,27 @@ public class NeighborRole {
     private Long usrId;
     private String userRole;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getUsrId() {
+        return usrId;
+    }
+
+    public void setUsrId(Long usrId) {
+        this.usrId = usrId;
+    }
+
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
+    }
 }

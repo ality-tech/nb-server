@@ -1,9 +1,6 @@
 package org.neighbor.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -12,8 +9,57 @@ public class NeighborUserStatusHistory {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long usrId;
+    @Transient
     private NeighborUser user;
     private ActivationStatus activationStatus;
     private Date createdOn;
     private String remark;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getUsrId() {
+        return usrId;
+    }
+
+    public void setUsrId(Long usrId) {
+        this.usrId = usrId;
+    }
+
+    public NeighborUser getUser() {
+        return user;
+    }
+
+    public void setUser(NeighborUser user) {
+        this.user = user;
+    }
+
+    public ActivationStatus getActivationStatus() {
+        return activationStatus;
+    }
+
+    public void setActivationStatus(ActivationStatus activationStatus) {
+        this.activationStatus = activationStatus;
+    }
+
+    public Date getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }
