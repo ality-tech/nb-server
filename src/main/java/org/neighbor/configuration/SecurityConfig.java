@@ -21,15 +21,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     BasicAuthenticationEntryPoint authenticationEntryPoint() {
-        return new BasicAuthenticationEntryPoint();
+        BasicAuthenticationEntryPoint authenticationEntryPoint = new BasicAuthenticationEntryPoint();
+        authenticationEntryPoint.setRealmName("ng-server api");
+        return authenticationEntryPoint;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**", "/index").permitAll()
-                .antMatchers("/user/**").hasRole("USER")
+                .antMatchers("/**").hasRole("USER")
                 .and()
                 .addFilter(authenticationFilter())
                 .formLogin();
@@ -37,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        //todo adjust me!
         auth
                 .inMemoryAuthentication()
                 .withUser("user").password("password").roles("USER");
