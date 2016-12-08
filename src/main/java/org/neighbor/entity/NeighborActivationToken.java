@@ -5,17 +5,17 @@ import java.util.Date;
 
 @Entity
 public class NeighborActivationToken {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private Long id;
     private Long userId;
-    @Transient
     private NeighborUser user;
     private String token;
     private TokenStatus tokenStatus;
     private Date createdOn;
     private Date validTo;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {
         return id;
     }
@@ -24,6 +24,7 @@ public class NeighborActivationToken {
         this.id = id;
     }
 
+    @Column(name = "user_id")
     public Long getUserId() {
         return userId;
     }
@@ -32,6 +33,8 @@ public class NeighborActivationToken {
         this.userId = userId;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", updatable = false, insertable = false)
     public NeighborUser getUser() {
         return user;
     }

@@ -4,6 +4,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -13,9 +14,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-@ComponentScan({"org.neighbor.services"})
+@ComponentScan({"org.neighbor.services", "org.neighbor.controllers"})
 @EntityScan("org.neighbor.entity")
 @EnableJpaRepositories("org.neighbor.repositories")
+@Import(SecurityConfig.class)
 public class AppConfig {
 
 

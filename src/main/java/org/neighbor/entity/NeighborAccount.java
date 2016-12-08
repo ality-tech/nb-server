@@ -5,11 +5,9 @@ import java.util.Date;
 
 @Entity
 public class NeighborAccount {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private Long id;
     private Long orgId;
-    @Transient
     private NeighborOrg org;
     private String accountNumber;
     private String accountUrn;
@@ -22,6 +20,8 @@ public class NeighborAccount {
     private Date updatedOn;
     private Boolean isActive = true;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {
         return id;
     }
@@ -30,6 +30,7 @@ public class NeighborAccount {
         this.id = id;
     }
 
+    @Column(name = "org_id")
     public Long getOrgId() {
         return orgId;
     }
@@ -38,6 +39,8 @@ public class NeighborAccount {
         this.orgId = orgId;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "org_id", updatable = false, insertable = false)
     public NeighborOrg getOrg() {
         return org;
     }
