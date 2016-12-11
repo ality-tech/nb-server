@@ -1,4 +1,4 @@
-package org.neighbor.main;
+package org.neighbor;
 
 import org.neighbor.configuration.AppConfig;
 import org.springframework.boot.SpringApplication;
