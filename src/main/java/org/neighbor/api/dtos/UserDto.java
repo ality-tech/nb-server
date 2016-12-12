@@ -1,6 +1,9 @@
 package org.neighbor.api.dtos;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.Date;
+import java.util.Objects;
 
 public class UserDto {
 
@@ -75,5 +78,39 @@ public class UserDto {
 
     public void setUpdatedOn(Date updatedOn) {
         this.updatedOn = updatedOn;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("accountId", accountId)
+                .add("userUrn", userUrn)
+                .add("login", login)
+                .add("pinCode", pinCode)
+                .add("userPhone", userPhone)
+                .add("activationStatus", activationStatus)
+                .add("createdOn", createdOn)
+                .add("updatedOn", updatedOn)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDto userDto = (UserDto) o;
+        return Objects.equals(accountId, userDto.accountId) &&
+                Objects.equals(userUrn, userDto.userUrn) &&
+                Objects.equals(login, userDto.login) &&
+                Objects.equals(pinCode, userDto.pinCode) &&
+                Objects.equals(userPhone, userDto.userPhone) &&
+                Objects.equals(activationStatus, userDto.activationStatus) &&
+                Objects.equals(createdOn, userDto.createdOn) &&
+                Objects.equals(updatedOn, userDto.updatedOn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountId, userUrn, login, pinCode, userPhone, activationStatus, createdOn, updatedOn);
     }
 }

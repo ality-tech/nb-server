@@ -7,7 +7,10 @@ import java.util.Date;
 public class NeighborAccount {
 
     private Long id;
+    @Column(name = "org_id")
     private Long orgId;
+    @ManyToOne(targetEntity = NeighborOrg.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "org_id", insertable = false, updatable = false)
     private NeighborOrg org;
     private String accountNumber;
     private String accountUrn;
@@ -128,4 +131,5 @@ public class NeighborAccount {
     public void setActive(Boolean active) {
         isActive = active;
     }
+
 }

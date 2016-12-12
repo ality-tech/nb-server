@@ -7,9 +7,13 @@ import java.util.Date;
 public class NeighborActivationToken {
 
     private Long id;
+    @Column(name = "user_id")
     private Long userId;
+    @ManyToOne(targetEntity = NeighborUser.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private NeighborUser user;
     private String token;
+    @Enumerated(EnumType.STRING)
     private TokenStatus tokenStatus;
     private Date createdOn;
     private Date validTo;

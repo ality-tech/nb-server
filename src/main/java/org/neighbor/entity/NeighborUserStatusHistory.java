@@ -8,9 +8,12 @@ public class NeighborUserStatusHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(name = "user_id")
     private Long usrId;
-    @Transient
+    @ManyToOne(targetEntity = NeighborUser.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private NeighborUser user;
+    @Enumerated(EnumType.STRING)
     private ActivationStatus activationStatus;
     private Date createdOn;
     private String remark;

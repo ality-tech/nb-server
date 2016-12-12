@@ -26,8 +26,7 @@ import javax.sql.DataSource;
 @Import(SecurityConfig.class)
 public class AppConfig {
 
-/*
-    @Bean(initMethod = "migrate")
+    /*@Bean(initMethod = "migrate")
     Flyway flyway() {
         Flyway flyway = new Flyway();
         flyway.setBaselineOnMigrate(true);
@@ -41,9 +40,10 @@ public class AppConfig {
     @ConfigurationProperties("spring.datasource")
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
-    }*/
+    }
 
- /*   @Bean
+    @Primary
+    @Bean
     @DependsOn("flyway")
     EntityManagerFactory entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();

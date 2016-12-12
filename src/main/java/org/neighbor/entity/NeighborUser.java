@@ -1,5 +1,7 @@
 package org.neighbor.entity;
 
+import com.google.common.base.MoreObjects;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -8,13 +10,16 @@ public class NeighborUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(name="account_id")
     private Long accountId;
-    @Transient
+    @ManyToOne(targetEntity = NeighborAccount.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private NeighborAccount account;
     private String userUrn;
     private String login;
     private String pinCode;
     private String userPhone;
+    @Enumerated(EnumType.STRING)
     private ActivationStatus activationStatus;
     private Date createdOn;
     private Date updatedOn;
@@ -97,5 +102,21 @@ public class NeighborUser {
 
     public void setUpdatedOn(Date updatedOn) {
         this.updatedOn = updatedOn;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("accountId", accountId)
+                .add("account", account)
+                .add("userUrn", userUrn)
+                .add("login", login)
+                .add("pinCode", pinCode)
+                .add("userPhone", userPhone)
+                .add("activationStatus", activationStatus)
+                .add("createdOn", createdOn)
+                .add("updatedOn", updatedOn)
+                .toString();
     }
 }

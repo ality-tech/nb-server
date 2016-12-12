@@ -12,8 +12,8 @@ public class NeighborOrg {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private Long extId;
-    private Boolean isActive = true;
+    private String extId;
+    private Boolean isActive;
 
     public Long getId() {
         return id;
@@ -31,11 +31,11 @@ public class NeighborOrg {
         this.name = name;
     }
 
-    public Long getExtId() {
+    public String getExtId() {
         return extId;
     }
 
-    public void setExtId(Long extId) {
+    public void setExtId(String extId) {
         this.extId = extId;
     }
 
