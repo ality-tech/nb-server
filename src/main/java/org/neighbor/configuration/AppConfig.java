@@ -26,40 +26,32 @@ import javax.sql.DataSource;
 @Import(SecurityConfig.class)
 public class AppConfig {
 
-
+/*
     @Bean(initMethod = "migrate")
-    Flyway flyway(@Autowired DataSource dataSource) {
+    Flyway flyway() {
         Flyway flyway = new Flyway();
         flyway.setBaselineOnMigrate(true);
-        flyway.setDataSource(dataSource);
+        flyway.setDataSource(dataSource());
         return flyway;
     }
 
     @Primary
     @Bean(name = "dataSource")
     @FlywayDataSource
-    @ConfigurationProperties(prefix="spring.datasource")
+    @ConfigurationProperties("spring.datasource")
     public DataSource dataSource() {
-        DataSource dataSource = DataSourceBuilder.create().build();
-        return dataSource;
-    }
+        return DataSourceBuilder.create().build();
+    }*/
 
-    @Bean
+ /*   @Bean
     @DependsOn("flyway")
-    EntityManagerFactory entityManagerFactory(@Autowired DataSource dataSource) {
+    EntityManagerFactory entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
-        bean.setDataSource(dataSource);
+        bean.setDataSource(dataSource());
 // other configurations
         return bean.getObject();
-    }
+    }*/
 
-    /*@Bean
-    DataSource dataSource() {
-        DataSource dataSource = new BasicDataSource();
-// data source configuration
-        return dataSource;
-    }
-*/
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)

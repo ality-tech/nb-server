@@ -1,7 +1,9 @@
 package org.neighbor.configuration;
 
+import org.neighbor.security.CustomBasicAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+@Configuration
 @EnableWebSecurity
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -38,24 +41,29 @@ user-controller – only user itself, 'nb_admin' or 'nb_operator' of user's org 
     public static final String REALM_NAME = "ng-server api";
     public static final String SECURITY_RULE_VIOLATION = "SECURITY_RULE_VIOLATION";
 
-    @Bean
-    BasicAuthenticationFilter authenticationFilter() throws Exception {
-        return new BasicAuthenticationFilter(authenticationManager(), authenticationEntryPoint());
+    @Autowired
+    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+        //todo adjust me!
+        auth.inMemoryAuthentication()
+                .withUser("user").password("password").roles("NB_DEV");
     }
 
+   /* @Bean
+    BasicAuthenticationFilter authenticationFilter() throws Exception {
+        return new BasicAuthenticationFilter(authenticationManager(), authenticationEntryPoint());
+    }*/
+
     @Bean
-    BasicAuthenticationEntryPoint authenticationEntryPoint() {
-        BasicAuthenticationEntryPoint authenticationEntryPoint = new BasicAuthenticationEntryPoint();
-        authenticationEntryPoint.setRealmName(REALM_NAME);
-        return authenticationEntryPoint;
+    CustomBasicAuthenticationEntryPoint authenticationEntryPoint() {
+        return new CustomBasicAuthenticationEntryPoint();
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()//todo remove
+//                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/swagger-ui.html").hasRole("NB_DEV")
                 .antMatchers("/account-controller/**").hasAnyRole("NB_USER", "NB_ADMIN")
                 .antMatchers("/org-controller**").hasRole("NB_ADMIN")
                 .antMatchers("/user-controller**").hasRole("NB_USER")
@@ -69,11 +77,4 @@ user-controller – only user itself, 'nb_admin' or 'nb_operator' of user's org 
         web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        //todo adjust me!
-        auth
-                .inMemoryAuthentication()
-                .withUser("user").password("password").roles("USER");
-    }
 }

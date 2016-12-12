@@ -14,8 +14,8 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private NeighborUserToUserDto neighborUserToUserDto;
+   /* @Autowired
+    private NeighborUserToUserDto neighborUserToUserDto;*/
 
     @Autowired
     private NeighborUserRepository userDao;
@@ -24,8 +24,8 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByUrn(String urn) {
         UserUrn userUrn = new UserUrn(urn);
         NeighborUser neighborUser = userDao.findByLogin(userUrn.getLogin());
-        UserDto userDto = neighborUserToUserDto.userToUserDto(neighborUser);
-        return userDto;
+//        UserDto userDto = neighborUserToUserDto.userToUserDto(neighborUser);
+        return new UserDto();
     }
 
     @Override
