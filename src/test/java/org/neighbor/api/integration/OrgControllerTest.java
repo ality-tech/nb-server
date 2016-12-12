@@ -12,6 +12,7 @@ import org.neighbor.entity.NeighborAccount;
 import org.neighbor.entity.NeighborOrg;
 import org.neighbor.repository.NeighborAccountRepository;
 import org.neighbor.repository.NeighborOrgRepository;
+import org.neighbor.service.NeighborAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -29,6 +30,8 @@ public class OrgControllerTest {
     private NeighborOrgRepository neighborOrgRepository;
     @Autowired
     private NeighborAccountRepository neighborAccountRepository;
+    @Autowired
+    private NeighborAccountService accountService;
 
     @Test
     /*
@@ -56,7 +59,9 @@ public class OrgControllerTest {
         Assert.assertEquals("DB should have org", expectedOrg, actualOrg);
 
         NeighborAccount actualAccount = neighborAccountRepository.findDefaultByOrgId(actualOrg.getId());
-        NeighborAccount expectedAccount = defaultForOrg(actualOrg.getId());
+        NeighborAccount expectedAccount = accountService.defaultForOrg(actualOrg.getId());
+        expectedAccount.setCreatedOn(actualAccount.getCreatedOn());
+        expectedAccount.setId(actualAccount.getId());
         Assert.assertEquals("DB should have default account", expectedAccount, actualAccount);
     }
 
@@ -79,20 +84,5 @@ public class OrgControllerTest {
         expectedResponse.setJsonError(error);
 
         Assert.assertEquals("response should return error", expectedResponse, response);
-    }
-
-    private NeighborAccount defaultForOrg(Long orgId){
-        NeighborAccount account = new NeighborAccount();
-        account.setOrgId(orgId);
-        account.setActive(true);
-        account.setAccountNumber("0");
-        account.setAddressBuilding("0");
-        account.setAddressFlat("0");
-        account.setAddressFloor("0");
-        account.setAddressStreet("0");
-        account.setCreatedOn(new Date());
-        account.setOwnerPhone("0");
-//        account.setAccountUrn("");  todo
-        return account;
     }
 }

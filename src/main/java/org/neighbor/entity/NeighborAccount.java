@@ -1,7 +1,10 @@
 package org.neighbor.entity;
 
+import com.google.common.base.MoreObjects;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class NeighborAccount {
@@ -132,4 +135,45 @@ public class NeighborAccount {
         isActive = active;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NeighborAccount that = (NeighborAccount) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(orgId, that.orgId) &&
+                Objects.equals(accountNumber, that.accountNumber) &&
+                Objects.equals(accountUrn, that.accountUrn) &&
+                Objects.equals(ownerPhone, that.ownerPhone) &&
+                Objects.equals(addressStreet, that.addressStreet) &&
+                Objects.equals(addressBuilding, that.addressBuilding) &&
+                Objects.equals(addressFloor, that.addressFloor) &&
+                Objects.equals(addressFlat, that.addressFlat) &&
+                Objects.equals(createdOn, that.createdOn) &&
+                Objects.equals(updatedOn, that.updatedOn) &&
+                Objects.equals(isActive, that.isActive);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, orgId, accountNumber, accountUrn, ownerPhone, addressStreet, addressBuilding, addressFloor, addressFlat, createdOn, updatedOn, isActive);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("orgId", orgId)
+                .add("accountNumber", accountNumber)
+                .add("accountUrn", accountUrn)
+                .add("ownerPhone", ownerPhone)
+                .add("addressStreet", addressStreet)
+                .add("addressBuilding", addressBuilding)
+                .add("addressFloor", addressFloor)
+                .add("addressFlat", addressFlat)
+                .add("createdOn", createdOn)
+                .add("updatedOn", updatedOn)
+                .add("isActive", isActive)
+                .toString();
+    }
 }
