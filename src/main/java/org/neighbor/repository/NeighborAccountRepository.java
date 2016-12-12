@@ -8,5 +8,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface NeighborAccountRepository extends CrudRepository<NeighborAccount, Long>{
     //// FIXME: should be DEFAULT acc
-    NeighborAccount findDefaultForOrg(@Param("orgId")Long orgId);
+    NeighborAccount findDefaultByOrgId(@Param("orgId")Long orgId);
 }

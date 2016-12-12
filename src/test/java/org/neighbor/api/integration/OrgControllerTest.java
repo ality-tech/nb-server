@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Date;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 public class OrgControllerTest {
@@ -48,12 +50,13 @@ public class OrgControllerTest {
         NeighborOrg expectedOrg = new NeighborOrg();
         expectedOrg.setExtId("unique_id");
         expectedOrg.setName("org_name");
+        expectedOrg.setActive(true);
         NeighborOrg actualOrg = neighborOrgRepository.findByExtId(org.getExtId());
         expectedOrg.setId(actualOrg.getId());
         Assert.assertEquals("DB should have org", expectedOrg, actualOrg);
 
-        NeighborAccount actualAccount = neighborAccountRepository.findDefaultForOrg(actualOrg.getId());
-        NeighborAccount expectedAccount = new NeighborAccount();
+        NeighborAccount actualAccount = neighborAccountRepository.findDefaultByOrgId(actualOrg.getId());
+        NeighborAccount expectedAccount = defaultForOrg(actualOrg.getId());
         Assert.assertEquals("DB should have default account", expectedAccount, actualAccount);
     }
 
@@ -76,5 +79,20 @@ public class OrgControllerTest {
         expectedResponse.setJsonError(error);
 
         Assert.assertEquals("response should return error", expectedResponse, response);
+    }
+
+    private NeighborAccount defaultForOrg(Long orgId){
+        NeighborAccount account = new NeighborAccount();
+        account.setOrgId(orgId);
+        account.setActive(true);
+        account.setAccountNumber("0");
+        account.setAddressBuilding("0");
+        account.setAddressFlat("0");
+        account.setAddressFloor("0");
+        account.setAddressStreet("0");
+        account.setCreatedOn(new Date());
+        account.setOwnerPhone("0");
+//        account.setAccountUrn("");  todo
+        return account;
     }
 }
