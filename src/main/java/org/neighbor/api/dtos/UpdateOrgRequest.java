@@ -1,12 +1,19 @@
 package org.neighbor.api.dtos;
 
-import java.util.Objects;
 
-public class OrgDto {
-
+public class UpdateOrgRequest {
+    private Long id;
     private String name;
     private String extId;
     private Boolean isActive;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -30,21 +37,5 @@ public class OrgDto {
 
     public void setActive(Boolean active) {
         isActive = active;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrgDto orgDto = (OrgDto) o;
-        return Objects.equals(name, orgDto.name) &&
-                Objects.equals(extId, orgDto.extId) &&
-                Objects.equals(isActive, orgDto.isActive);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, extId, isActive);
     }
 }

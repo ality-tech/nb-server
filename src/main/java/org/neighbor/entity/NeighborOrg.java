@@ -1,6 +1,8 @@
 package org.neighbor.entity;
 
 
+import com.google.common.base.MoreObjects;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -62,5 +64,15 @@ public class NeighborOrg {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, extId, isActive);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("name", name)
+                .add("extId", extId)
+                .add("isActive", isActive)
+                .toString();
     }
 }

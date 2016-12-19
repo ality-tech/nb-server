@@ -53,6 +53,7 @@ public class NeighborAccount {
 
     public void setOrg(NeighborOrg org) {
         this.org = org;
+        this.orgId = org.getId();
     }
 
     public String getAccountNumber() {

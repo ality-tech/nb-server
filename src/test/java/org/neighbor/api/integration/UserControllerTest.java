@@ -11,13 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.UUID;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-//@Rollback(value = false)
+@Transactional
 public class UserControllerTest {
 
     @Autowired
@@ -29,6 +30,7 @@ public class UserControllerTest {
     public static final String LOGIN_TESTER = "Tester";
 
     @Test
+    @Rollback
     public void shouldInsertUser() {
         String pinCode = UUID.randomUUID().toString();
         Date createdOn = new Date();

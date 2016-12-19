@@ -1,17 +1,15 @@
 package org.neighbor.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class NeighborRole {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Long usrId;
-    private String userRole;
+    private Long userId;
+    @Enumerated(EnumType.STRING)
+    private RoleEnum userRole;
 
     public Long getId() {
         return id;
@@ -21,19 +19,19 @@ public class NeighborRole {
         this.id = id;
     }
 
-    public Long getUsrId() {
-        return usrId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUsrId(Long usrId) {
-        this.usrId = usrId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public String getUserRole() {
+    public RoleEnum getUserRole() {
         return userRole;
     }
 
-    public void setUserRole(String userRole) {
+    public void setUserRole(RoleEnum userRole) {
         this.userRole = userRole;
     }
 }
