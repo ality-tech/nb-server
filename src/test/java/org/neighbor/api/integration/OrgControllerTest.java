@@ -193,13 +193,13 @@ public class OrgControllerTest {
     @Test
     public void shouldReturnListOfOrgs() {
         List<OrgDto> actualResult = orgController.list();
-        assertEquals("should return empty list", 0, actualResult.size());
+        int beforeSize = actualResult.size();
         CreateOrgRequest org = new CreateOrgRequest();
         org.setExtId("unique_id");
         org.setName("org_name");
         orgController.create(org);
         actualResult = orgController.list();
-        assertEquals("should return list with 1 org", 1, actualResult.size());
+        assertEquals("should return list with +1 org", beforeSize+1, actualResult.size());
         OrgDto dto = new OrgDto();
         dto.setActive(true);
         dto.setName(org.getName());
