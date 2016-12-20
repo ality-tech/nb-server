@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional
-public interface NeighborRoleRepository extends CrudRepository<NeighborRole, Long>{
+public interface RoleRepository extends CrudRepository<NeighborRole, Long>{
 
     List<NeighborRole> findByUserId(@Param("user_id") Long usrId);
 

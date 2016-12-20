@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional
-public interface NeighborUserRepository extends CrudRepository<NeighborUser, Long> {
+public interface UserRepository extends CrudRepository<NeighborUser, Long> {
 
     NeighborUser findByLogin(@Param("login") String login);
 

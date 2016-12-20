@@ -25,7 +25,7 @@ public class AccountServiceImpl implements AccountService {
     private OrgRepository orgRepository;
 
     @Autowired
-    private NeighborUserService userService;
+    private UserService userService;
 
     @Autowired
     private CreateAccountRequestToAccount requestToAccountMapper;
@@ -45,6 +45,8 @@ public class AccountServiceImpl implements AccountService {
         NeighborAccount account = requestToAccountMapper.createAccountRequestToAccount(createAccountRequest);
         String urn = createAccountRequest.getOrgExtId() + ":" + createAccountRequest.getAccountNumber();//todo
         account.setAccountUrn(urn);
+        account.setOrg(org);
+        account.setCreatedOn(new Date());
         accountRepository.save(account);
         return generateOkResponse();
     }
@@ -52,7 +54,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void createDefaultAccountForOrgId(Long orgId) {
         NeighborAccount account = createAccount(defaultForOrg(orgId));
-        userService.createDefaultUserForAccountId(account.getId());
+//        userService.createDefaultUserForAccountId(account.getId());
     }
 
     @Override

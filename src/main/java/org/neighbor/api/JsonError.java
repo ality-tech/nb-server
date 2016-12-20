@@ -1,7 +1,9 @@
 package org.neighbor.api;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.base.MoreObjects;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 import java.util.Objects;
@@ -10,6 +12,8 @@ public class JsonError {
 
     private ErrorCode code;
     private String message;
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ssZ")
+    @ApiModelProperty(dataType = "java.lang.String", example = "2016-04-20T12:15:00+0100")
     private Date timestamp = new Date();
 
     public ErrorCode getCode() {

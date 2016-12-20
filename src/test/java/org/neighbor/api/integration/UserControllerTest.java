@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.neighbor.api.dtos.UserDto;
 import org.neighbor.controller.UserController;
 import org.neighbor.entity.NeighborUser;
-import org.neighbor.repository.NeighborUserRepository;
+import org.neighbor.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -25,7 +25,7 @@ public class UserControllerTest {
     private UserController userController;
 
     @Autowired
-    private NeighborUserRepository neighborUserRepository;
+    private UserRepository neighborUserRepository;
     public static final String USER_PHONE = "23089742139847";
     public static final String LOGIN_TESTER = "Tester";
 

@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface UserService {
 
+//    NeighborUser createDefaultUserForAccountId(Long accountId);
+
+//    NeighborUser defaultForAccount(Long accountId);
+
     UserDto getUserByUrn(String urn);
 
     //todo add Filter

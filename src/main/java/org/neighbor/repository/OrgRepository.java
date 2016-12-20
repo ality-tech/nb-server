@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface OrgRepository extends CrudRepository<NeighborOrg, Long>{
 
     Optional<NeighborOrg> findByExtId(@Param("extId") String extId);
+
 }

@@ -39,6 +39,7 @@ public class OrgServiceImpl implements OrgService {
         org.setExtId(extId);
         org.setName(request.getName());
         org.setActive(true);
+
         NeighborOrg savedOrg = orgRepository.save(org);
         accountService.createDefaultAccountForOrgId(savedOrg.getId());
         GeneralResponse response = new GeneralResponse(201, null);//201 according to specs
