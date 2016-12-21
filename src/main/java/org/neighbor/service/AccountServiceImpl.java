@@ -48,7 +48,7 @@ public class AccountServiceImpl implements AccountService {
         account.setOrg(org);
         account.setCreatedOn(new Date());
         accountRepository.save(account);
-        return generateOkResponse();
+        return generateOkResponse(201);
     }
 
     @Override
@@ -94,8 +94,8 @@ public class AccountServiceImpl implements AccountService {
         return account;
     }
 
-    private GeneralResponse generateOkResponse() {
-        return new GeneralResponse(200, null);
+    private GeneralResponse generateOkResponse(int code) {
+        return new GeneralResponse(code, null);
     }
 
 }

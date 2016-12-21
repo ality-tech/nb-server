@@ -4,8 +4,10 @@ import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.dtos.CreateAccountRequest;
 import org.neighbor.entity.NeighborAccount;
 import org.neighbor.service.AccountService;
+import org.neighbor.utils.ResponseWrapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,8 +21,8 @@ public class AccountController {
     private AccountService accountService;
 
     @RequestMapping(value = "/create")
-    public GeneralResponse create(@RequestBody CreateAccountRequest createAccountRequest) {
-        return accountService.createAccount(createAccountRequest);
+    public ResponseEntity<GeneralResponse> create(@RequestBody CreateAccountRequest createAccountRequest) {
+        return ResponseWrapUtil.wrap(accountService.createAccount(createAccountRequest));
     }
 
     @RequestMapping(value = "/update")
@@ -37,6 +39,5 @@ public class AccountController {
     public Iterable<NeighborAccount> listByFilter(@RequestBody Object filter) {
         return accountService.listByFilter(filter);
     }
-
 
 }
