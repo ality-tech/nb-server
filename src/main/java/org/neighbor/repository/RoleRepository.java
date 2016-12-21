@@ -1,13 +1,15 @@
 package org.neighbor.repository;
 
-import org.neighbor.entity.NeighborUser;
+import org.neighbor.entity.NeighborRole;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-public interface NeighborUserRepository extends CrudRepository<NeighborUser, Long> {
+import java.util.List;
 
-    NeighborUser findByLogin(@Param("login") String login);
+@Transactional
+public interface RoleRepository extends CrudRepository<NeighborRole, Long>{
+
+    List<NeighborRole> findByUserId(@Param("user_id") Long usrId);
 
 }

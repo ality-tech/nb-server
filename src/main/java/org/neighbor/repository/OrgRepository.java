@@ -5,10 +5,11 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Transactional
-public interface NeighborOrgRepository extends CrudRepository<NeighborOrg, Long>{
+public interface OrgRepository extends CrudRepository<NeighborOrg, Long>{
 
-    NeighborOrg findByExtId(@Param("extId") String extId);
-
+    Optional<NeighborOrg> findByExtId(@Param("extId") String extId);
 
 }

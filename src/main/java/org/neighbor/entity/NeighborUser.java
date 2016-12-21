@@ -4,6 +4,7 @@ import com.google.common.base.MoreObjects;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class NeighborUser {
@@ -105,11 +106,31 @@ public class NeighborUser {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NeighborUser that = (NeighborUser) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(accountId, that.accountId) &&
+                Objects.equals(userUrn, that.userUrn) &&
+                Objects.equals(login, that.login) &&
+                Objects.equals(pinCode, that.pinCode) &&
+                Objects.equals(userPhone, that.userPhone) &&
+                activationStatus == that.activationStatus &&
+                Objects.equals(createdOn, that.createdOn) &&
+                Objects.equals(updatedOn, that.updatedOn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, accountId, userUrn, login, pinCode, userPhone, activationStatus, createdOn, updatedOn);
+    }
+
+    @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("accountId", accountId)
-                .add("account", account)
                 .add("userUrn", userUrn)
                 .add("login", login)
                 .add("pinCode", pinCode)

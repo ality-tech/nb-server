@@ -38,14 +38,17 @@ user-controller – only user itself, 'nb_admin' or 'nb_operator' of user's org 
 
     public static final String REALM_NAME = "ng-server api";
     public static final String SECURITY_RULE_VIOLATION = "SECURITY_RULE_VIOLATION";
+    private static final String ROLE_DEV = "NB_DEV";
+    private static final String ROLE_USER = "NB_USER";
+    private static final String ROLE_ADMIN = "NB_ADMIN";
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
         //todo adjust me!
         auth.inMemoryAuthentication()
-                .withUser("dev").password("password").roles("NB_DEV");
+                .withUser("dev").password("password").roles(ROLE_DEV);
         auth.inMemoryAuthentication()
-                .withUser("user").password("password").roles("NB_USER");
+                .withUser("user").password("password").roles(ROLE_USER);
     }
 
    /* @Bean
@@ -64,9 +67,9 @@ user-controller – only user itself, 'nb_admin' or 'nb_operator' of user's org 
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**").hasRole("NB_DEV")
-                .antMatchers("/account/**").hasAnyRole("NB_USER", "NB_ADMIN", "NB_DEV")
-                .antMatchers("/org/**").hasAnyRole("NB_ADMIN", "NB_DEV")
-                .antMatchers("/user/**").hasAnyRole("NB_USER", "NB_DEV")
+                .antMatchers("/account/**").hasAnyRole(ROLE_USER, ROLE_ADMIN, ROLE_DEV)
+                .antMatchers("/org/**").hasAnyRole(ROLE_ADMIN, ROLE_DEV)
+                .antMatchers("/user/**").hasAnyRole(ROLE_USER, ROLE_DEV)
                 .antMatchers("/**").denyAll()
                 .and().httpBasic().realmName(REALM_NAME).authenticationEntryPoint(authenticationEntryPoint())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
