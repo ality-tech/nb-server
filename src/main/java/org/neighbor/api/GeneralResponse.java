@@ -8,6 +8,8 @@ public class GeneralResponse {
 
     private int httpCode;
     private JsonError jsonError;
+    public static GeneralResponse OK = new GeneralResponse(200, null);
+    public static GeneralResponse CREATED = new GeneralResponse(201, null);
 
     public GeneralResponse() {
     }

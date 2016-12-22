@@ -48,7 +48,7 @@ public class AccountControllerTest {
         createAccountRequest.setOrgExtId(orgExtId);
         GeneralResponse actualResponse = accountController.create(createAccountRequest).getBody();
         GeneralResponse expectedResponse = new GeneralResponse();
-        expectedResponse.setHttpCode(200);
+        expectedResponse.setHttpCode(201);
         assertEquals("should return success response", expectedResponse, actualResponse);
 
         Iterable<NeighborAccount> all = accountRepository.findAll();

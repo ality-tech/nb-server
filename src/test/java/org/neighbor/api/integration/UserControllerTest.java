@@ -41,7 +41,7 @@ public class UserControllerTest {
         user.setPinCode(pinCode);
         user.setUserPhone(USER_PHONE);
         NeighborUser neighborUser = neighborUserRepository.save(user);
-        UserDto userById = userController.getUserById("aaa:111:bbb:ccc:Tester");
+        UserDto userById = userController.getUserById("aaa:111:bbb:ccc:Tester").getBody();
 
         UserDto expectedUserDto = new UserDto();
         expectedUserDto.setLogin(LOGIN_TESTER);

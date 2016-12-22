@@ -1,6 +1,9 @@
 package org.neighbor.service;
 
+import org.neighbor.api.AccountUrn;
+import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.UserUrn;
+import org.neighbor.api.dtos.CreateUserRequest;
 import org.neighbor.api.dtos.UserDto;
 import org.neighbor.entity.NeighborUser;
 import org.neighbor.mappers.NeighborUserToUserDto;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,12 +34,22 @@ public class UserServiceImpl implements UserService {
 //        return user;
 //    }
 
+
+    @Override
+    public GeneralResponse create(CreateUserRequest request, AccountUrn accountUrn) {
+
+        return null;
+    }
+
     @Override
     public UserDto getUserByUrn(String urn) {
         UserUrn userUrn = new UserUrn(urn);
-        NeighborUser neighborUser = userRepository.findByLogin(userUrn.getLogin());
-        UserDto userDto = neighborUserToUserDto.userToUserDto(neighborUser);
-        return userDto;
+        Optional<NeighborUser> neighborUser = userRepository.findByLogin(userUrn.getLogin());
+        if (neighborUser.isPresent()) {
+            UserDto userDto = neighborUserToUserDto.userToUserDto(neighborUser.get());
+            return userDto;
+        }
+        return null;
     }
 
     @Override
@@ -48,7 +62,17 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-//    @Override
+    @Override
+    public Optional<NeighborUser> getUserByLoginAndPin(String login, String pin) {
+        return userRepository.findUserByLoginAndPinCode(login, pin);
+    }
+
+    @Override
+    public Optional<NeighborUser> getUserByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
+
+    //    @Override
 //    public NeighborUser defaultForAccount(Long accountId) {
 //        NeighborUser user = new NeighborUser();
 //        user.setUserPhone("0");
@@ -56,7 +80,7 @@ public class UserServiceImpl implements UserService {
 //        user.setCreatedOn(new Date());
 //        user.setAccountId(accountId);
 //        user.setActivationStatus(ActivationStatus.ACTIVE);
-//        user.setUserUrn("0");
+//        user.setAccountUrn("0");
 //        user.setLogin("0");//todo ???
 //        return user;
 //    }
