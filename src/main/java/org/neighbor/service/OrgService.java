@@ -16,4 +16,6 @@ public interface OrgService {
 
     OrgDto getById(GetOrgByIdRequest id);
 
+    OrgDto getById(String extId);
+
 }

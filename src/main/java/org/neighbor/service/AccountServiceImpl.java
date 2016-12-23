@@ -94,6 +94,16 @@ public class AccountServiceImpl implements AccountService {
         return account;
     }
 
+    @Override
+    public Optional<NeighborAccount> findById(Long id) {
+        return accountRepository.findById(id);
+    }
+
+    @Override
+    public Optional<NeighborAccount> findOrgAndAccountNumber(Long orgId, String accountNumber) {
+        return accountRepository.findByOrgIdAndAccountNumber(orgId, accountNumber);
+    }
+
     private GeneralResponse generateOkResponse(int code) {
         return new GeneralResponse(code, null);
     }

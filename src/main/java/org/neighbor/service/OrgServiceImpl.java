@@ -86,7 +86,12 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     public OrgDto getById(GetOrgByIdRequest id) {
-        Optional<NeighborOrg> byExtId = orgRepository.findByExtId(id.getId());
+        return getById(id.getId());
+    }
+
+    @Override
+    public OrgDto getById(String extId) {
+        Optional<NeighborOrg> byExtId = orgRepository.findByExtId(extId);
         if (byExtId.isPresent()) return orgMapper.orgToOrgDto(byExtId.get());
         else return null;//todo ???
     }

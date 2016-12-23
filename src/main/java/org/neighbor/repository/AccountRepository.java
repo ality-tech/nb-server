@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 public interface AccountRepository extends CrudRepository<NeighborAccount, Long>{
@@ -14,4 +15,8 @@ public interface AccountRepository extends CrudRepository<NeighborAccount, Long>
     List<NeighborAccount> findByOrgId(Long orgId);
 
     List<NeighborAccount> findDefaultByOrgIdAndAccountNumber(Long orgId, String accountNumber);
+
+    Optional<NeighborAccount> findByOrgIdAndAccountNumber(Long orgId, String accountNumber);
+
+    Optional<NeighborAccount> findById(Long accountId);
 }

@@ -6,10 +6,12 @@ import org.neighbor.entity.NeighborAccount;
 import org.neighbor.entity.NeighborOrg;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AccountService {
 
     NeighborAccount createAccount(NeighborAccount account);
+
     GeneralResponse createAccount(CreateAccountRequest createAccountRequest);
 
     void createDefaultAccountForOrgId(Long id);
@@ -23,4 +25,8 @@ public interface AccountService {
     void delete(NeighborAccount account);
 
     NeighborAccount findDefaultByOrgIdAndOwnerPhone(Long orgId, String ownerPhone);
+
+    Optional<NeighborAccount> findById(Long accountId);
+
+    Optional<NeighborAccount> findOrgAndAccountNumber(Long orgId, String accountNumber);
 }

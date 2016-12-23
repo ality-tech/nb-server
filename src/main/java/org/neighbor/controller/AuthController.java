@@ -2,6 +2,7 @@ package org.neighbor.controller;
 
 import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.dtos.AuthCheckRequest;
+import org.neighbor.api.dtos.AuthRegisterRequest;
 import org.neighbor.service.AuthService;
 import org.neighbor.utils.ResponseWrapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,9 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/register")
-    public void register() {
+    public ResponseEntity<GeneralResponse> register(AuthRegisterRequest request) {
+        GeneralResponse response = authService.register(request);
+        return ResponseWrapUtil.wrap(response);
     }
 
     @RequestMapping(value = "/confirm")

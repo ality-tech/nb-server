@@ -47,6 +47,7 @@ public class NeighborUser {
 
     public void setAccount(NeighborAccount account) {
         this.account = account;
+        this.accountId = account.getId();
     }
 
     public String getUserUrn() {
