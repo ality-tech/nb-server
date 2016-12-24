@@ -1,8 +1,6 @@
 package org.neighbor.service;
 
-import org.neighbor.api.ErrorCode;
 import org.neighbor.api.GeneralResponse;
-import org.neighbor.api.JsonError;
 import org.neighbor.api.dtos.*;
 import org.neighbor.entity.NeighborAccount;
 import org.neighbor.entity.NeighborOrg;
@@ -33,7 +31,7 @@ public class OrgServiceImpl implements OrgService {
         String extId = request.getExtId();
         Optional<NeighborOrg> byExtId = orgRepository.findByExtId(extId);
         if (byExtId.isPresent()) {
-            return generateAlreadyExistError();
+            return ResponseGenerator.ORG_ALREADY_EXISTS_ERROR;
         }
         NeighborOrg org = new NeighborOrg();
         org.setExtId(extId);
@@ -42,7 +40,7 @@ public class OrgServiceImpl implements OrgService {
 
         NeighborOrg savedOrg = orgRepository.save(org);
         accountService.createDefaultAccountForOrgId(savedOrg.getId());
-        GeneralResponse response = new GeneralResponse(201, null);//201 according to specs
+        GeneralResponse response = ResponseGenerator.CREATED;
         return response;
     }
 
@@ -56,7 +54,7 @@ public class OrgServiceImpl implements OrgService {
         org.setActive(updateOrgRequest.getActive());
         org.setName(updateOrgRequest.getName());
         orgRepository.save(org);
-        return generateOkResponse();
+        return ResponseGenerator.OK;
     }
 
     @Override
@@ -69,14 +67,14 @@ public class OrgServiceImpl implements OrgService {
         List<NeighborAccount> accounts = accountService.findByOrg(org);
         if (accounts.isEmpty()) {
             orgRepository.delete(org);
-            return generateOkResponse();
+            return ResponseGenerator.OK;
         } else if (accounts.size() == 1 && accounts.contains(accountService.findDefaultByOrgIdAndOwnerPhone(org.getId(), "0"))) {
             accountService.delete(accounts.get(0));
             orgRepository.delete(org);
-            return generateOkResponse();
+            return ResponseGenerator.OK;
         }
 
-        return generateHasLinkedEntitiesError();
+        return ResponseGenerator.ORG_HAS_LINKED_ENTITIES_ERROR;
     }
 
     @Override
@@ -96,23 +94,4 @@ public class OrgServiceImpl implements OrgService {
         else return null;//todo ???
     }
 
-    private GeneralResponse generateOkResponse() {
-        return new GeneralResponse(200, null);
-    }
-
-    private GeneralResponse generateAlreadyExistError() {
-        JsonError error = new JsonError();
-        error.setCode(ErrorCode.ORG_WITH_EXTID_ALREADY_EXISTS);
-        error.setMessage("There is already exist org with given ext_id");
-        GeneralResponse errorResponse = new GeneralResponse(400, error);
-        return errorResponse;
-    }
-
-    private GeneralResponse generateHasLinkedEntitiesError() {
-        JsonError error = new JsonError();
-        error.setCode(ErrorCode.ORG_HAS_LINKED_ENTITIES);
-        error.setMessage("There are exist non default accounts linked to given org");
-        GeneralResponse errorResponse = new GeneralResponse(400, error);
-        return errorResponse;
-    }
 }

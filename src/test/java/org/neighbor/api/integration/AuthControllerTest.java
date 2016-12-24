@@ -5,10 +5,7 @@ import org.junit.runner.RunWith;
 import org.neighbor.api.ErrorCode;
 import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.JsonError;
-import org.neighbor.api.dtos.AuthCheckRequest;
-import org.neighbor.api.dtos.AuthRegisterRequest;
-import org.neighbor.api.dtos.CreateAccountRequest;
-import org.neighbor.api.dtos.CreateOrgRequest;
+import org.neighbor.api.dtos.*;
 import org.neighbor.controller.AccountController;
 import org.neighbor.controller.AuthController;
 import org.neighbor.controller.OrgController;
@@ -190,4 +187,48 @@ public class AuthControllerTest {
         expectedBody.setJsonError(error);
         assertEquals("should correct body", expectedBody, response.getBody());
     }
+
+
+    /*
+    /auth/confirm
+        accepts login + token
+        if activation_token found in status 'SENT' then
+        update token activation_status to 'CONFIRMED'
+        create new bn_user_status_history with 'ACTIVE' status
+        update nb_user.activation_status for nb_user
+        set nb_user.updated_on to current timestamp
+     */
+    @Test
+    public void shouldConfirmRegistration() {
+        String testOrgExtId = "test_org";
+        String testAccountNumber = "existing_account";
+        String login = "unique_login";
+        CreateOrgRequest org = new CreateOrgRequest();
+        org.setExtId(testOrgExtId);
+        org.setName("org_name");
+        orgController.create(org).getBody();
+
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest();
+        createAccountRequest.setAccountNumber(testAccountNumber);
+        createAccountRequest.setOwnerPhone("6789");
+        createAccountRequest.setOrgExtId(testOrgExtId);
+        GeneralResponse actualResponse = accountController.create(createAccountRequest).getBody();
+
+        AuthRegisterRequest request = new AuthRegisterRequest();
+        request.setExtId(testOrgExtId);
+        request.setAccountNumber(testAccountNumber);
+        request.setLogin(login);
+        request.setPinCode("password");
+        request.setUserPhone("1234676789");
+        ResponseEntity<GeneralResponse> registerResponse = authController.register(request);
+        AuthConfirmRequest confirmRequest = new AuthConfirmRequest();
+        confirmRequest.setToken(registerResponse.getBody().getToken());
+        confirmRequest.setLogin(login);
+
+        ResponseEntity<GeneralResponse> response = authController.confirm(confirmRequest);
+
+        assertNotNull("should contain response", response);
+    }
+
+
 }

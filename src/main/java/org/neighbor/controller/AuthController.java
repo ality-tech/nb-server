@@ -2,6 +2,7 @@ package org.neighbor.controller;
 
 import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.dtos.AuthCheckRequest;
+import org.neighbor.api.dtos.AuthConfirmRequest;
 import org.neighbor.api.dtos.AuthRegisterRequest;
 import org.neighbor.service.AuthService;
 import org.neighbor.utils.ResponseWrapUtil;
@@ -33,7 +34,8 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/confirm")
-    public void confirm() {
+    public ResponseEntity<GeneralResponse> confirm(AuthConfirmRequest confirmRequest) {
+        return ResponseWrapUtil.wrap(authService.confirm(confirmRequest));
     }
 
     @RequestMapping(value = "/recovery")
