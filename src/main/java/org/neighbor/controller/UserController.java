@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -41,11 +42,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/get-by-filter", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiIgnore
     public ResponseEntity<List<UserDto>> getUserByFilter(@RequestBody Object filter) {
         return new ResponseEntity<>(userService.getUsersByFilter(filter), HttpStatus.I_AM_A_TEAPOT);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiIgnore
     public ResponseEntity<GeneralResponse> update(@RequestBody String urn) {
         return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
     }

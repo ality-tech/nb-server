@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping(value = "/account", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -26,16 +27,19 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/update")
+    @ApiIgnore
     public NeighborAccount update(@RequestBody Object account) {
         return new NeighborAccount();
     }
 
     @RequestMapping(value = "/delete")
+    @ApiIgnore
     public NeighborAccount delete(@RequestBody Object account) {
         return new NeighborAccount();
     }
 
     @RequestMapping(value = "/list-by-filter")
+    @ApiIgnore
     public Iterable<NeighborAccount> listByFilter(@RequestBody Object filter) {
         return accountService.listByFilter(filter);
     }
