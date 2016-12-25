@@ -106,11 +106,14 @@ public class AuthServiceImpl implements AuthService {
         NeighborActivationToken token = persistToken(user);
 
         NeighborRole role = new NeighborRole();
-        role.setUserRole(RoleEnum.NB_USER);
+        role.setUserRole(RoleEnum.ROLE_NB_USER);
         role.setUser(user);
         roleRepository.save(role);
 
-        return ResponseGenerator.CREATED;
+        GeneralResponse ok = new GeneralResponse();
+        ok.setHttpCode(201);
+        ok.setToken(token.getToken());
+        return ok;
     }
 
     private NeighborUser persistUser(AuthRegisterRequest request, NeighborAccount account) {

@@ -113,7 +113,7 @@ public class AuthControllerTest {
 
         List<NeighborRole> roles = roleRepository.findByUserId(user.getId());
         assertTrue("user should have role", !roles.isEmpty());
-        assertTrue("user should have nb_user role", roles.stream().filter(r -> r.getUserRole() == RoleEnum.NB_USER).findFirst().isPresent());
+        assertTrue("user should have nb_user role", roles.stream().filter(r -> r.getUserRole() == RoleEnum.ROLE_NB_USER).findFirst().isPresent());
     }
 
     @Test

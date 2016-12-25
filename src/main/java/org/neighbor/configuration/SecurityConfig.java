@@ -1,5 +1,6 @@
 package org.neighbor.configuration;
 
+import org.neighbor.entity.RoleEnum;
 import org.neighbor.security.CustomBasicAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -41,14 +45,19 @@ user-controller – only user itself, 'nb_admin' or 'nb_operator' of user's org 
     private static final String ROLE_DEV = "NB_DEV";
     private static final String ROLE_USER = "NB_USER";
     private static final String ROLE_ADMIN = "NB_ADMIN";
+    private static final String ROLE_OPERATOR = "NB_OPERATOR";
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        //todo adjust me!
-        auth.inMemoryAuthentication()
-                .withUser("dev").password("password").roles(ROLE_DEV);
-        auth.inMemoryAuthentication()
-                .withUser("user").password("password").roles(ROLE_USER);
+        auth.userDetailsService(userDetailsService);
+    }
+
+    @Bean(name = "passwordEncoder")
+    public PasswordEncoder passwordencoder() {
+        return new BCryptPasswordEncoder();
     }
 
    /* @Bean
@@ -63,10 +72,11 @@ user-controller – only user itself, 'nb_admin' or 'nb_operator' of user's org 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        System.out.println(RoleEnum.ROLE_NB_ADMIN.name());
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**").hasRole("NB_DEV")
+                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**").hasRole(ROLE_ADMIN)
                 .antMatchers("/account/**").hasAnyRole(ROLE_USER, ROLE_ADMIN, ROLE_DEV)
                 .antMatchers("/org/**").hasAnyRole(ROLE_ADMIN, ROLE_DEV)
                 .antMatchers("/user/**").hasAnyRole(ROLE_USER, ROLE_DEV)
@@ -78,7 +88,7 @@ user-controller – only user itself, 'nb_admin' or 'nb_operator' of user's org 
     /* To allow Pre-flight [OPTIONS] request from browser */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
+        web.debug(true).ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
     }
 
 }

@@ -22,7 +22,7 @@ public class RoleServiceImpl implements RoleService {
 
         NeighborRole role = new NeighborRole();
         role.setUserId(userId);
-        role.setUserRole(RoleEnum.NB_OPERATOR);
+        role.setUserRole(RoleEnum.ROLE_NB_OPERATOR);
         return role;
     }
 }

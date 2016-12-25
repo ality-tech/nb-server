@@ -86,9 +86,9 @@ public class OrgControllerTest {
 //
 //        Optional<NeighborRole> optionalRole = roleRepository.findByUserId(optionalUser.get().getId())
 //                .stream()
-//                .filter(role -> RoleEnum.NB_OPERATOR == role.getUserRole())
+//                .filter(role -> RoleEnum.ROLE_NB_OPERATOR == role.getUserRole())
 //                .findFirst();
-//        assertTrue("Default user should have NB_OPERATOR role", optionalRole.isPresent());
+//        assertTrue("Default user should have ROLE_NB_OPERATOR role", optionalRole.isPresent());
     }
 
     @Test
