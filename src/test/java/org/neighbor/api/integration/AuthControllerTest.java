@@ -118,6 +118,54 @@ public class AuthControllerTest {
     }
 
     @Test
+    public void shouldThrowUserExistError() {
+        String testOrgExtId = "test_org";
+        String testAccountNumber = "existing_account";
+        CreateOrgRequest org = new CreateOrgRequest();
+        org.setExtId(testOrgExtId);
+        org.setName("org_name");
+        orgController.create(org).getBody();
+
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest();
+        createAccountRequest.setAccountNumber(testAccountNumber);
+        createAccountRequest.setOwnerPhone("6789");
+        createAccountRequest.setOrgExtId(testOrgExtId);
+        accountController.create(createAccountRequest);
+
+        String nonUniqueLogin = "nonunique_login";
+        NeighborUser nonUniqueUser = new NeighborUser();
+        nonUniqueUser.setLogin(nonUniqueLogin);
+        userRepository.save(nonUniqueUser);
+
+        AuthRegisterRequest request = new AuthRegisterRequest();
+        request.setExtId(testOrgExtId);
+        request.setAccountNumber(testAccountNumber);
+        request.setLogin(nonUniqueLogin);
+        request.setPinCode("password");
+        request.setUserPhone("1234676789");
+
+        ResponseEntity<GeneralResponse> response = authController.register(request);
+        assertNotNull("should contain response", response);
+        assertEquals("response should have 400 status", 400, response.getStatusCode().value());
+        assertEquals("response should have 400 status", ResponseGenerator.USER_ALREADY_EXIST_ERROR, response.getBody());
+
+        nonUniqueUser.setActivationStatus(ActivationStatus.ACTIVE);
+        userRepository.save(nonUniqueUser);
+        ResponseEntity<GeneralResponse> responseUserActive = authController.register(request);
+        assertEquals("response should have 400 status", ResponseGenerator.USER_ALREADY_EXIST_ERROR, responseUserActive.getBody());
+
+        nonUniqueUser.setActivationStatus(ActivationStatus.BLOCKED);
+        userRepository.save(nonUniqueUser);
+        ResponseEntity<GeneralResponse> responseUserBlocked = authController.register(request);
+        assertEquals("response should have 400 status", ResponseGenerator.USER_BLOCKED_ERROR, responseUserBlocked.getBody());
+
+        nonUniqueUser.setActivationStatus(ActivationStatus.REQUESTED);
+        userRepository.save(nonUniqueUser);
+        ResponseEntity<GeneralResponse> responseUserRequested = authController.register(request);
+        assertEquals("response should have 400 status", ResponseGenerator.USER_REGISTRATION_REQUESTED_ERROR, responseUserRequested.getBody());
+    }
+
+    @Test
     public void shouldThrowAccNotExist() {
         String testOrgExtId = "test_org";
         String testAccountNumber = "existing_account";
@@ -277,5 +325,7 @@ public class AuthControllerTest {
         ResponseEntity<GeneralResponse> responseWrongUser = authController.confirm(confirmRequest);
         assertEquals("should return SECURITY_VIOLATION error", ResponseGenerator.SECURITY_VIOLATION_ERROR, responseWrongUser.getBody());
     }
+
+
 
 }

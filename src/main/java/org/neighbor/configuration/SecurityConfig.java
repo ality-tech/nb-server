@@ -40,7 +40,6 @@ user-controller – only user itself, 'nb_admin' or 'nb_operator' of user's org 
     * */
 
     public static final String REALM_NAME = "ng-server api";
-    public static final String SECURITY_RULE_VIOLATION = "SECURITY_RULE_VIOLATION";
     private static final String ROLE_DEV = "NB_DEV";
     private static final String ROLE_USER = "NB_USER";
     private static final String ROLE_ADMIN = "NB_ADMIN";

@@ -154,6 +154,9 @@ public class AuthServiceImpl implements AuthService {
 
     //todo cover by tests
     private GeneralResponse generateUserExistResponse(NeighborUser user) {
+        if (user.getActivationStatus() == null) {
+            return ResponseGenerator.USER_ALREADY_EXIST_ERROR;
+        }
         switch (user.getActivationStatus()) {
             case BLOCKED:
                 return ResponseGenerator.USER_BLOCKED_ERROR;
