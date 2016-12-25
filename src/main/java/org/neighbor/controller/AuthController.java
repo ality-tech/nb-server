@@ -28,13 +28,13 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/register")
-    public ResponseEntity<GeneralResponse> register(AuthRegisterRequest request) {
+    public ResponseEntity<GeneralResponse> register(@RequestBody AuthRegisterRequest request) {
         GeneralResponse response = authService.register(request);
         return ResponseWrapUtil.wrap(response);
     }
 
     @RequestMapping(value = "/confirm")
-    public ResponseEntity<GeneralResponse> confirm(AuthConfirmRequest confirmRequest) {
+    public ResponseEntity<GeneralResponse> confirm(@RequestBody AuthConfirmRequest confirmRequest) {
         return ResponseWrapUtil.wrap(authService.confirm(confirmRequest));
     }
 
