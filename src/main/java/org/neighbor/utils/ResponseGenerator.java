@@ -19,6 +19,15 @@ public class ResponseGenerator {
     public static final GeneralResponse ORG_ALREADY_EXISTS_ERROR = generateOrgAlreadyExistError();
     public static final GeneralResponse USER_NOT_FOUND_ERROR = generateUserNotFoundError();
     public static final GeneralResponse TOKEN_NOT_FOUND_ERROR = generateTokenNotFoundError();
+    public static final GeneralResponse SECURITY_VIOLATION_ERROR = generateSecurityViolationError();
+
+    private static GeneralResponse generateSecurityViolationError() {
+        JsonError error = new JsonError();
+        error.setCode(ErrorCode.SECURITY_VIOLATION);
+        error.setMessage("No token for user found");
+        GeneralResponse errorResponse = new GeneralResponse(400, error);
+        return errorResponse;
+    }
 
     private static GeneralResponse generateTokenNotFoundError() {
         JsonError error = new JsonError();

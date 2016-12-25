@@ -12,4 +12,6 @@ public interface TokenRepository extends CrudRepository<NeighborActivationToken,
     List<NeighborActivationToken> findByUserId(Long userId);
 
     Optional<NeighborActivationToken> findLastByUserId(Long userId);
+
+    Optional<NeighborActivationToken> findByToken(String token);
 }

@@ -165,18 +165,26 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public GeneralResponse confirm(AuthConfirmRequest confirmRequest) {
+
         String login = confirmRequest.getLogin();
+        Optional<NeighborActivationToken> foundToken = tokenRepository.findByToken(confirmRequest.getToken());
+        if (!foundToken.isPresent()) return ResponseGenerator.SECURITY_VIOLATION_ERROR;
+        NeighborActivationToken token = foundToken.get();
+
+        if (TokenStatus.SENT != token.getTokenStatus()){
+            return ResponseGenerator.SECURITY_VIOLATION_ERROR;
+        }
+
         Optional<NeighborUser> userByLogin = userService.getUserByLogin(login);
         if (!userByLogin.isPresent())
-            return ResponseGenerator.USER_NOT_FOUND_ERROR;
+            return ResponseGenerator.SECURITY_VIOLATION_ERROR;
 
         NeighborUser user = userByLogin.get();
-        Optional<NeighborActivationToken> tokenByUser = tokenRepository.findLastByUserId(user.getId());
-        if (!tokenByUser.isPresent())
-            return ResponseGenerator.TOKEN_NOT_FOUND_ERROR;
+        if (!user.getId().equals(token.getUserId())){
+            return ResponseGenerator.SECURITY_VIOLATION_ERROR;
+        }
 
         //ok
-        NeighborActivationToken token = tokenByUser.get();
         token.setTokenStatus(TokenStatus.CONFIRMED);
         NeighborUserStatusHistory history = new NeighborUserStatusHistory();
         history.setCreatedOn(new Date());
