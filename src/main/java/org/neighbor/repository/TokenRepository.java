@@ -11,7 +11,5 @@ import java.util.Optional;
 public interface TokenRepository extends CrudRepository<NeighborActivationToken, Long> {
     List<NeighborActivationToken> findByUserId(Long userId);
 
-    Optional<NeighborActivationToken> findLastByUserId(Long userId);
-
     Optional<NeighborActivationToken> findByToken(String token);
 }

@@ -15,6 +15,7 @@ import org.neighbor.repository.TokenRepository;
 import org.neighbor.repository.UserHistoryRepository;
 import org.neighbor.repository.UserRepository;
 import org.neighbor.service.AuthService;
+import org.neighbor.utils.ResponseGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
@@ -230,5 +231,51 @@ public class AuthControllerTest {
         assertNotNull("should contain response", response);
     }
 
+    @Test
+    public void shouldThrowSecurityViolationOnWrongDataConfirm() {
+
+        AuthConfirmRequest confirmRequest = new AuthConfirmRequest();
+        confirmRequest.setToken("abc");
+        confirmRequest.setLogin("non_exists");
+
+        ResponseEntity<GeneralResponse> response = authController.confirm(confirmRequest);
+
+        assertNotNull("should contain response", response);
+        assertEquals("response code should be 400", 400, response.getStatusCode().value());
+        assertEquals("should return SECURITY_VIOLATION error", ResponseGenerator.SECURITY_VIOLATION_ERROR, response.getBody());
+
+        NeighborActivationToken token = new NeighborActivationToken();
+        String test_token = "test_token";
+        token.setToken(test_token);
+        tokenRepository.save(token);
+        confirmRequest.setToken(test_token);
+        ResponseEntity<GeneralResponse> responseExistTokenAbsentUser = authController.confirm(confirmRequest);
+        assertEquals("should return SECURITY_VIOLATION error", ResponseGenerator.SECURITY_VIOLATION_ERROR, responseExistTokenAbsentUser.getBody());
+
+        token.setTokenStatus(TokenStatus.CONFIRMED);
+        tokenRepository.save(token);
+        ResponseEntity<GeneralResponse> responseAlreadyConfirmed = authController.confirm(confirmRequest);
+        assertEquals("should return SECURITY_VIOLATION error", ResponseGenerator.SECURITY_VIOLATION_ERROR, responseAlreadyConfirmed.getBody());
+
+        token.setTokenStatus(TokenStatus.SENT);
+        tokenRepository.save(token);
+        ResponseEntity<GeneralResponse> responseNonExistUser = authController.confirm(confirmRequest);
+        assertEquals("should return SECURITY_VIOLATION error", ResponseGenerator.SECURITY_VIOLATION_ERROR, responseNonExistUser.getBody());
+
+        NeighborUser user = new NeighborUser();
+        String testUserLogin = "test_user";
+        user.setLogin(testUserLogin);
+        userRepository.save(user);
+
+        NeighborUser anotherUser = new NeighborUser();
+        anotherUser.setLogin("another_user");
+        userRepository.save(anotherUser);
+        token.setUserId(anotherUser.getId());
+        tokenRepository.save(token);
+
+        confirmRequest.setLogin(testUserLogin);
+        ResponseEntity<GeneralResponse> responseWrongUser = authController.confirm(confirmRequest);
+        assertEquals("should return SECURITY_VIOLATION error", ResponseGenerator.SECURITY_VIOLATION_ERROR, responseWrongUser.getBody());
+    }
 
 }

@@ -10,6 +10,7 @@ import org.neighbor.entity.*;
 import org.neighbor.repository.*;
 import org.neighbor.utils.ResponseGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
@@ -34,7 +35,8 @@ public class AuthServiceImpl implements AuthService {
     private TokenRepository tokenRepository;
     @Autowired
     private RoleRepository roleRepository;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public GeneralResponse check(AuthCheckRequest request) {
@@ -121,7 +123,7 @@ public class AuthServiceImpl implements AuthService {
         NeighborUser user = new NeighborUser();
         user.setAccount(account);
         user.setLogin(request.getLogin());
-        user.setPinCode(request.getPinCode());
+        user.setPinCode(passwordEncoder.encode(request.getPinCode()));
         user.setCreatedOn(new Date());
         user.setActivationStatus(ActivationStatus.REQUESTED);
         user.setUserPhone(request.getUserPhone());
@@ -168,7 +170,8 @@ public class AuthServiceImpl implements AuthService {
 
         String login = confirmRequest.getLogin();
         Optional<NeighborActivationToken> foundToken = tokenRepository.findByToken(confirmRequest.getToken());
-        if (!foundToken.isPresent()) return ResponseGenerator.SECURITY_VIOLATION_ERROR;
+        if (!foundToken.isPresent())
+            return ResponseGenerator.SECURITY_VIOLATION_ERROR;
         NeighborActivationToken token = foundToken.get();
 
         if (TokenStatus.SENT != token.getTokenStatus()){
