@@ -1,6 +1,5 @@
 package org.neighbor.configuration;
 
-import org.neighbor.entity.RoleEnum;
 import org.neighbor.security.CustomBasicAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -72,7 +71,6 @@ user-controller – only user itself, 'nb_admin' or 'nb_operator' of user's org 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        System.out.println(RoleEnum.ROLE_NB_ADMIN.name());
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()

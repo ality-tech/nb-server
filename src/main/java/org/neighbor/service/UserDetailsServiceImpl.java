@@ -41,7 +41,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
             for (NeighborRole role : roles) {
                 String role1 = role.getUserRole().name();
-                System.out.println(role1);
                 grantedAuthorities.add(new SimpleGrantedAuthority(role1));
             }
             return new User(user.getLogin(), user.getPinCode(), grantedAuthorities);
