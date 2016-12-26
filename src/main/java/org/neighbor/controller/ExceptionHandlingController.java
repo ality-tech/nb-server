@@ -21,5 +21,4 @@ public class ExceptionHandlingController {
         ResponseEntity<GeneralResponse> response = new ResponseEntity(body, HttpStatus.INTERNAL_SERVER_ERROR);
         return response;
     }
-
 }

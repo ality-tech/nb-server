@@ -20,6 +20,15 @@ public class ResponseGenerator {
     public static final GeneralResponse USER_NOT_FOUND_ERROR = generateUserNotFoundError();
     public static final GeneralResponse TOKEN_NOT_FOUND_ERROR = generateTokenNotFoundError();
     public static final GeneralResponse SECURITY_VIOLATION_ERROR = generateSecurityViolationError();
+    public static final GeneralResponse UNAUTHORIZED_ERROR = generateUnauthorizedError();
+
+    private static GeneralResponse generateUnauthorizedError() {
+        JsonError error = new JsonError();
+        error.setCode(ErrorCode.UNAUTHORIZED);
+        error.setMessage("User is not authorized");
+        GeneralResponse errorResponse = new GeneralResponse(401, error);
+        return errorResponse;
+    }
 
     private static GeneralResponse generateSecurityViolationError() {
         JsonError error = new JsonError();
