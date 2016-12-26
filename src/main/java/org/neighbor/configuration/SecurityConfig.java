@@ -72,7 +72,7 @@ user-controller – only user itself, 'nb_admin' or 'nb_operator' of user's org 
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/auth/**", "/org/list").permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**").hasRole(ROLE_ADMIN)
                 .antMatchers("/org/**").hasAnyRole(ROLE_ADMIN)
                 .antMatchers("/account/**").hasAnyRole(ROLE_OPERATOR, ROLE_ADMIN)
