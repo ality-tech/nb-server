@@ -161,6 +161,8 @@ public class OrgControllerTest {
         NeighborOrg org = foundedOrg.get();
         NeighborAccount account = new NeighborAccount();
         account.setOrg(org);
+        account.setAccountNumber("accountname");
+        account.setAccountUrn("org_to_delete:accountname");
         accountService.createAccount(account);
         DeleteOrgRequest deleteRequest = new DeleteOrgRequest();
         deleteRequest.setExtId(extId);
