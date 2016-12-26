@@ -73,22 +73,10 @@ public class OrgControllerTest {
         assertEquals("DB should have saved org", expectedOrg, actualOrg.get());
         NeighborAccount actualAccount = accountRepository.findDefaultByOrgIdAndOwnerPhone(actualOrg.get().getId(), "0");
 
-        NeighborAccount expectedAccount = accountService.defaultForOrg(actualOrg.get().getId());
+        NeighborAccount expectedAccount = accountService.defaultForOrg(actualOrg.get());
         expectedAccount.setCreatedOn(actualAccount.getCreatedOn());
         expectedAccount.setId(actualAccount.getId());
         assertEquals("DB should have default account", expectedAccount, actualAccount);
-
-//        Optional<NeighborUser> optionalUser = userRepository.findByAccountId(actualAccount.getId())
-//                .stream()
-//                .filter(user -> "0".equals(user.getLogin()))
-//                .findFirst();
-//        assertTrue("Default account should have default user", optionalUser.isPresent());
-//
-//        Optional<NeighborRole> optionalRole = roleRepository.findByUserId(optionalUser.get().getId())
-//                .stream()
-//                .filter(role -> RoleEnum.ROLE_NB_OPERATOR == role.getUserRole())
-//                .findFirst();
-//        assertTrue("Default user should have ROLE_NB_OPERATOR role", optionalRole.isPresent());
     }
 
     @Test

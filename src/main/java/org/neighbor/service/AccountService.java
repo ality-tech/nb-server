@@ -14,9 +14,9 @@ public interface AccountService {
 
     GeneralResponse createAccount(CreateAccountRequest createAccountRequest);
 
-    void createDefaultAccountForOrgId(Long id);
+    void createDefaultAccountForOrgId(NeighborOrg id);
 
-    NeighborAccount defaultForOrg(Long orgId);
+    NeighborAccount defaultForOrg(NeighborOrg orgId);
 
     List<NeighborAccount> findByOrg(NeighborOrg byExtId);
 

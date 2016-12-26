@@ -39,7 +39,7 @@ public class OrgServiceImpl implements OrgService {
         org.setActive(true);
 
         NeighborOrg savedOrg = orgRepository.save(org);
-        accountService.createDefaultAccountForOrgId(savedOrg.getId());
+        accountService.createDefaultAccountForOrgId(savedOrg);
         GeneralResponse response = ResponseGenerator.CREATED;
         return response;
     }
