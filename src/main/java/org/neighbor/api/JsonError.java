@@ -2,12 +2,14 @@ package org.neighbor.api;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.base.MoreObjects;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 import java.util.Objects;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JsonError {
 
     private ErrorCode code;

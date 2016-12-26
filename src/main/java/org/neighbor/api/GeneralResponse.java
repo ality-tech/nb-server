@@ -1,9 +1,11 @@
 package org.neighbor.api;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GeneralResponse {
 
     private int httpCode;

@@ -1,5 +1,6 @@
 package org.neighbor.controller;
 
+import io.swagger.annotations.ApiParam;
 import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.dtos.AuthCheckRequest;
 import org.neighbor.api.dtos.AuthConfirmRequest;
@@ -23,7 +24,7 @@ public class AuthController {
     private AuthService authService;
 
     @RequestMapping(value = "/check")
-    public ResponseEntity<GeneralResponse> check(@RequestBody AuthCheckRequest request) {
+    public ResponseEntity<GeneralResponse> check(@RequestBody @ApiParam(required = false) AuthCheckRequest request) {
         GeneralResponse response = authService.check(request);
         return ResponseWrapUtil.wrap(response);
     }

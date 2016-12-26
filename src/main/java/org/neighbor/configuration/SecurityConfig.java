@@ -48,11 +48,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/**", "/org/list").permitAll()
+                .antMatchers("/auth/register", "/auth/confirm", "/auth/recovery", "/org/list").permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**").hasRole(ROLE_ADMIN)
                 .antMatchers("/org/**").hasAnyRole(ROLE_ADMIN)
                 .antMatchers("/account/**").hasAnyRole(ROLE_OPERATOR, ROLE_ADMIN)
                 .antMatchers("/user/**").hasAnyRole(ROLE_USER, ROLE_OPERATOR, ROLE_ADMIN)
+                .antMatchers("/auth/check").hasAnyRole(ROLE_USER, ROLE_OPERATOR, ROLE_ADMIN)
                 .antMatchers("/**").denyAll()
                 .and().httpBasic().realmName(REALM_NAME).authenticationEntryPoint(authenticationEntryPoint())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

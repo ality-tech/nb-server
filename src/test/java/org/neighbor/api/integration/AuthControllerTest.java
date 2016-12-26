@@ -5,7 +5,10 @@ import org.junit.runner.RunWith;
 import org.neighbor.api.ErrorCode;
 import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.JsonError;
-import org.neighbor.api.dtos.*;
+import org.neighbor.api.dtos.AuthConfirmRequest;
+import org.neighbor.api.dtos.AuthRegisterRequest;
+import org.neighbor.api.dtos.CreateAccountRequest;
+import org.neighbor.api.dtos.CreateOrgRequest;
 import org.neighbor.controller.AccountController;
 import org.neighbor.controller.AuthController;
 import org.neighbor.controller.OrgController;
@@ -14,14 +17,12 @@ import org.neighbor.repository.RoleRepository;
 import org.neighbor.repository.TokenRepository;
 import org.neighbor.repository.UserHistoryRepository;
 import org.neighbor.repository.UserRepository;
-import org.neighbor.service.AuthService;
 import org.neighbor.utils.ResponseGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,34 +49,6 @@ public class AuthControllerTest {
     private TokenRepository tokenRepository;
     @Autowired
     private RoleRepository roleRepository;
-
-    /*
-        /auth/check
-        accepts login + pin_code (hash)
-        if user not exists throws an exception: USER_NOT_REGISTERED
-        is user blocked throws as exception: USED_BLOCKED
-        returns empty response with 200 status on success
-     */
-
-    @Test
-    public void shouldAcceptLoginPin() {
-        //todo create user before this test!
-        AuthCheckRequest request = new AuthCheckRequest();
-        String hash = Base64Utils.encodeToString(("login" + AuthService.SEPARATOR + "password").getBytes());
-        request.setHash(hash);
-        ResponseEntity<GeneralResponse> response = authController.check(request);
-    }
-
-    /*
-        /auth/registeraccepts user information + ext_id + account_number
-        if login already registered throw an exception with code:
-        USER_ACTIVE/REGISTRATION_REQUESTED/USER_BLOCKED_ERROR
-        check if org_id valid (exists and not blocked)
-        check that nb_account exists and not blocked
-        create are user + bn_user_status_history entry in 'REQUESTED' state + new nb_activation_token entry with
-        sha1(random uuid) token with blank valid_to date
-        default role attached to user: 'nb_user'
-     */
 
     @Test
     public void shouldRegisterUser() {
@@ -147,22 +120,29 @@ public class AuthControllerTest {
         ResponseEntity<GeneralResponse> response = authController.register(request);
         assertNotNull("should contain response", response);
         assertEquals("response should have 400 status", 400, response.getStatusCode().value());
-        assertEquals("response should have 400 status", ResponseGenerator.USER_ALREADY_EXIST_ERROR, response.getBody());
+        GeneralResponse expected = ResponseGenerator.generateUserActiveError();
+        expected.getJsonError().setTimestamp(response.getBody().getJsonError().getTimestamp());
+        assertEquals("response should have 400 status", expected, response.getBody());
 
         nonUniqueUser.setActivationStatus(ActivationStatus.ACTIVE);
         userRepository.save(nonUniqueUser);
         ResponseEntity<GeneralResponse> responseUserActive = authController.register(request);
-        assertEquals("response should have 400 status", ResponseGenerator.USER_ALREADY_EXIST_ERROR, responseUserActive.getBody());
+        expected.getJsonError().setTimestamp(responseUserActive.getBody().getJsonError().getTimestamp());
+        assertEquals("response should have 400 status", expected, responseUserActive.getBody());
 
         nonUniqueUser.setActivationStatus(ActivationStatus.BLOCKED);
         userRepository.save(nonUniqueUser);
         ResponseEntity<GeneralResponse> responseUserBlocked = authController.register(request);
-        assertEquals("response should have 400 status", ResponseGenerator.USER_BLOCKED_ERROR, responseUserBlocked.getBody());
+        GeneralResponse userBlockedError = ResponseGenerator.generateUserBlockedError();
+        userBlockedError.getJsonError().setTimestamp(responseUserBlocked.getBody().getJsonError().getTimestamp());
+        assertEquals("response should have 400 status", userBlockedError, responseUserBlocked.getBody());
 
         nonUniqueUser.setActivationStatus(ActivationStatus.REQUESTED);
         userRepository.save(nonUniqueUser);
         ResponseEntity<GeneralResponse> responseUserRequested = authController.register(request);
-        assertEquals("response should have 400 status", ResponseGenerator.USER_REGISTRATION_REQUESTED_ERROR, responseUserRequested.getBody());
+        GeneralResponse userRegistrationRequestedError = ResponseGenerator.generateUserRequestedRegistrationError();
+        userRegistrationRequestedError.getJsonError().setTimestamp(responseUserRequested.getBody().getJsonError().getTimestamp());
+        assertEquals("response should have 400 status", userRegistrationRequestedError, responseUserRequested.getBody());
     }
 
     @Test
@@ -290,7 +270,9 @@ public class AuthControllerTest {
 
         assertNotNull("should contain response", response);
         assertEquals("response code should be 400", 400, response.getStatusCode().value());
-        assertEquals("should return SECURITY_VIOLATION error", ResponseGenerator.SECURITY_VIOLATION_ERROR, response.getBody());
+        GeneralResponse expectedError = ResponseGenerator.generateSecurityViolationError();
+        expectedError.getJsonError().setTimestamp(response.getBody().getJsonError().getTimestamp());
+        assertEquals("should return SECURITY_VIOLATION error", expectedError, response.getBody());
 
         NeighborActivationToken token = new NeighborActivationToken();
         String test_token = "test_token";
@@ -298,17 +280,20 @@ public class AuthControllerTest {
         tokenRepository.save(token);
         confirmRequest.setToken(test_token);
         ResponseEntity<GeneralResponse> responseExistTokenAbsentUser = authController.confirm(confirmRequest);
-        assertEquals("should return SECURITY_VIOLATION error", ResponseGenerator.SECURITY_VIOLATION_ERROR, responseExistTokenAbsentUser.getBody());
+        expectedError.getJsonError().setTimestamp(responseExistTokenAbsentUser.getBody().getJsonError().getTimestamp());
+        assertEquals("should return SECURITY_VIOLATION error", expectedError, responseExistTokenAbsentUser.getBody());
 
         token.setTokenStatus(TokenStatus.CONFIRMED);
         tokenRepository.save(token);
         ResponseEntity<GeneralResponse> responseAlreadyConfirmed = authController.confirm(confirmRequest);
-        assertEquals("should return SECURITY_VIOLATION error", ResponseGenerator.SECURITY_VIOLATION_ERROR, responseAlreadyConfirmed.getBody());
+        expectedError.getJsonError().setTimestamp(responseAlreadyConfirmed.getBody().getJsonError().getTimestamp());
+        assertEquals("should return SECURITY_VIOLATION error", expectedError, responseAlreadyConfirmed.getBody());
 
         token.setTokenStatus(TokenStatus.SENT);
         tokenRepository.save(token);
         ResponseEntity<GeneralResponse> responseNonExistUser = authController.confirm(confirmRequest);
-        assertEquals("should return SECURITY_VIOLATION error", ResponseGenerator.SECURITY_VIOLATION_ERROR, responseNonExistUser.getBody());
+        expectedError.getJsonError().setTimestamp(responseNonExistUser.getBody().getJsonError().getTimestamp());
+        assertEquals("should return SECURITY_VIOLATION error", expectedError, responseNonExistUser.getBody());
 
         NeighborUser user = new NeighborUser();
         String testUserLogin = "test_user";
@@ -323,7 +308,8 @@ public class AuthControllerTest {
 
         confirmRequest.setLogin(testUserLogin);
         ResponseEntity<GeneralResponse> responseWrongUser = authController.confirm(confirmRequest);
-        assertEquals("should return SECURITY_VIOLATION error", ResponseGenerator.SECURITY_VIOLATION_ERROR, responseWrongUser.getBody());
+        expectedError.getJsonError().setTimestamp(responseWrongUser.getBody().getJsonError().getTimestamp());
+        assertEquals("should return SECURITY_VIOLATION error", expectedError, responseWrongUser.getBody());
     }
 
 

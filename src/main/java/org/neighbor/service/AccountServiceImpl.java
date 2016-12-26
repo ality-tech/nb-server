@@ -39,7 +39,7 @@ public class AccountServiceImpl implements AccountService {
     public GeneralResponse createAccount(CreateAccountRequest createAccountRequest) {
         Optional<NeighborOrg> foundOrg = orgRepository.findByExtId(createAccountRequest.getOrgExtId());
         if (!foundOrg.isPresent())
-            return ResponseGenerator.ORG_NOTEXIST_ERROR;
+            return ResponseGenerator.generateOrgNotExistError();
         NeighborOrg org = foundOrg.get();
         accountRepository.findDefaultByOrgIdAndAccountNumber(org.getId(), createAccountRequest.getAccountNumber());
         NeighborAccount account = requestToAccountMapper.createAccountRequestToAccount(createAccountRequest);

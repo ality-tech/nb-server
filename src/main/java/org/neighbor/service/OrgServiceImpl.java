@@ -31,7 +31,7 @@ public class OrgServiceImpl implements OrgService {
         String extId = request.getExtId();
         Optional<NeighborOrg> byExtId = orgRepository.findByExtId(extId);
         if (byExtId.isPresent()) {
-            return ResponseGenerator.ORG_ALREADY_EXISTS_ERROR;
+            return ResponseGenerator.generateOrgAlreadyExistError();
         }
         NeighborOrg org = new NeighborOrg();
         org.setExtId(extId);
@@ -48,7 +48,7 @@ public class OrgServiceImpl implements OrgService {
     public GeneralResponse update(UpdateOrgRequest updateOrgRequest) {
         Optional<NeighborOrg> byExtId = orgRepository.findByExtId(updateOrgRequest.getExtId());
         if (!byExtId.isPresent()) {
-            return ResponseGenerator.ORG_NOTEXIST_ERROR;
+            return ResponseGenerator.generateOrgNotExistError();
         }
         NeighborOrg org = byExtId.get();
         org.setActive(updateOrgRequest.getActive());
@@ -61,7 +61,7 @@ public class OrgServiceImpl implements OrgService {
     public GeneralResponse delete(DeleteOrgRequest deleteOrgRequest) {
         Optional<NeighborOrg> foundedOrg = orgRepository.findByExtId(deleteOrgRequest.getExtId());
         if (!foundedOrg.isPresent()) {
-            return ResponseGenerator.ORG_NOTEXIST_ERROR;
+            return ResponseGenerator.generateOrgNotExistError();
         }
         NeighborOrg org = foundedOrg.get();
         List<NeighborAccount> accounts = accountService.findByOrg(org);
@@ -74,7 +74,7 @@ public class OrgServiceImpl implements OrgService {
             return ResponseGenerator.OK;
         }
 
-        return ResponseGenerator.ORG_HAS_LINKED_ENTITIES_ERROR;
+        return ResponseGenerator.generateOrgHasLinkedEntitiesError();
     }
 
     @Override

@@ -22,7 +22,7 @@ public class CustomBasicAuthenticationEntryPoint extends BasicAuthenticationEntr
         response.setContentType("application/json");
         ObjectMapper mapper = new ObjectMapper();
         response.getOutputStream().println(
-                mapper.writeValueAsString(ResponseGenerator.UNAUTHORIZED_ERROR)
+                mapper.writeValueAsString(ResponseGenerator.generateUnauthorizedError())
         );
     }
 
