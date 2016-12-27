@@ -39,7 +39,7 @@ public class AccountServiceImpl implements AccountService {
     public GeneralResponse createAccount(CreateAccountRequest createAccountRequest) {
         Optional<NeighborOrg> foundOrg = orgRepository.findByExtId(createAccountRequest.getOrgExtId());
         if (!foundOrg.isPresent())
-            return ResponseGenerator.ORG_NOTEXIST_ERROR;
+            return ResponseGenerator.generateOrgNotExistError();
         NeighborOrg org = foundOrg.get();
         accountRepository.findDefaultByOrgIdAndAccountNumber(org.getId(), createAccountRequest.getAccountNumber());
         NeighborAccount account = requestToAccountMapper.createAccountRequestToAccount(createAccountRequest);
@@ -48,12 +48,13 @@ public class AccountServiceImpl implements AccountService {
         account.setOrg(org);
         account.setCreatedOn(new Date());
         accountRepository.save(account);
-        return generateOkResponse();
+        return generateOkResponse(201);
     }
 
     @Override
-    public void createDefaultAccountForOrgId(Long orgId) {
-        NeighborAccount account = createAccount(defaultForOrg(orgId));
+    public void createDefaultAccountForOrgId(NeighborOrg org) {
+        NeighborAccount account = createAccount(defaultForOrg(org));
+
 //        userService.createDefaultUserForAccountId(account.getId());
     }
 
@@ -79,9 +80,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public NeighborAccount defaultForOrg(Long orgId) {
+    public NeighborAccount defaultForOrg(NeighborOrg org) {
         NeighborAccount account = new NeighborAccount();
-        account.setOrgId(orgId);
+        account.setOrg(org);
         account.setActive(true);
         account.setAccountNumber("0");
         account.setAddressBuilding("0");
@@ -90,12 +91,22 @@ public class AccountServiceImpl implements AccountService {
         account.setAddressStreet("0");
         account.setCreatedOn(new Date());
         account.setOwnerPhone("0");
-//        account.setOrgExtId("");  todo
+        account.setAccountUrn(org.getExtId() + ":" + account.getAccountNumber());
         return account;
     }
 
-    private GeneralResponse generateOkResponse() {
-        return new GeneralResponse(200, null);
+    @Override
+    public Optional<NeighborAccount> findById(Long id) {
+        return accountRepository.findById(id);
+    }
+
+    @Override
+    public Optional<NeighborAccount> findOrgAndAccountNumber(Long orgId, String accountNumber) {
+        return accountRepository.findByOrgIdAndAccountNumber(orgId, accountNumber);
+    }
+
+    private GeneralResponse generateOkResponse(int code) {
+        return new GeneralResponse(code, null);
     }
 
 }

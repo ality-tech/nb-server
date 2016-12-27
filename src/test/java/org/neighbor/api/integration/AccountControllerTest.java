@@ -46,9 +46,9 @@ public class AccountControllerTest {
         createAccountRequest.setAccountNumber("1234");
         createAccountRequest.setOwnerPhone("6789");
         createAccountRequest.setOrgExtId(orgExtId);
-        GeneralResponse actualResponse = accountController.create(createAccountRequest);
+        GeneralResponse actualResponse = accountController.create(createAccountRequest).getBody();
         GeneralResponse expectedResponse = new GeneralResponse();
-        expectedResponse.setHttpCode(200);
+        expectedResponse.setHttpCode(201);
         assertEquals("should return success response", expectedResponse, actualResponse);
 
         Iterable<NeighborAccount> all = accountRepository.findAll();
@@ -76,7 +76,7 @@ public class AccountControllerTest {
         requestForNonUnique.setAccountNumber(accountNumber);
         requestForNonUnique.setOwnerPhone("6789");
         requestForNonUnique.setOrgExtId("abc:123:vvv:bbb:nnn");
-        GeneralResponse actualResponse = accountController.create(requestForNonUnique);
+        GeneralResponse actualResponse = accountController.create(requestForNonUnique).getBody();
         assertNotNull("response should contain error", actualResponse.getJsonError());
         assertEquals("should return 400 code", 400, actualResponse.getHttpCode());
         JsonError expectedError = new JsonError();

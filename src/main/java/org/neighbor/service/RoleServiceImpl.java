@@ -15,14 +15,12 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void createDefaultRoleForUserId(Long userId) {
         NeighborRole role = roleRepository.save(defaultRoleForUserId(userId));
-        System.out.println(role);
     }
 
     private NeighborRole defaultRoleForUserId(Long userId) {
-
         NeighborRole role = new NeighborRole();
         role.setUserId(userId);
-        role.setUserRole(RoleEnum.NB_OPERATOR);
+        role.setUserRole(RoleEnum.ROLE_NB_OPERATOR);
         return role;
     }
 }

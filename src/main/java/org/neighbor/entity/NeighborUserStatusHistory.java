@@ -40,6 +40,7 @@ public class NeighborUserStatusHistory {
 
     public void setUser(NeighborUser user) {
         this.user = user;
+        this.usrId = user.getId();
     }
 
     public ActivationStatus getActivationStatus() {

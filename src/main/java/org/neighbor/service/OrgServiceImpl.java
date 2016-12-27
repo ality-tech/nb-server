@@ -1,8 +1,6 @@
 package org.neighbor.service;
 
-import org.neighbor.api.ErrorCode;
 import org.neighbor.api.GeneralResponse;
-import org.neighbor.api.JsonError;
 import org.neighbor.api.dtos.*;
 import org.neighbor.entity.NeighborAccount;
 import org.neighbor.entity.NeighborOrg;
@@ -33,7 +31,7 @@ public class OrgServiceImpl implements OrgService {
         String extId = request.getExtId();
         Optional<NeighborOrg> byExtId = orgRepository.findByExtId(extId);
         if (byExtId.isPresent()) {
-            return generateAlreadyExistError();
+            return ResponseGenerator.generateOrgAlreadyExistError();
         }
         NeighborOrg org = new NeighborOrg();
         org.setExtId(extId);
@@ -41,8 +39,8 @@ public class OrgServiceImpl implements OrgService {
         org.setActive(true);
 
         NeighborOrg savedOrg = orgRepository.save(org);
-        accountService.createDefaultAccountForOrgId(savedOrg.getId());
-        GeneralResponse response = new GeneralResponse(201, null);//201 according to specs
+        accountService.createDefaultAccountForOrgId(savedOrg);
+        GeneralResponse response = ResponseGenerator.CREATED;
         return response;
     }
 
@@ -50,33 +48,33 @@ public class OrgServiceImpl implements OrgService {
     public GeneralResponse update(UpdateOrgRequest updateOrgRequest) {
         Optional<NeighborOrg> byExtId = orgRepository.findByExtId(updateOrgRequest.getExtId());
         if (!byExtId.isPresent()) {
-            return ResponseGenerator.ORG_NOTEXIST_ERROR;
+            return ResponseGenerator.generateOrgNotExistError();
         }
         NeighborOrg org = byExtId.get();
         org.setActive(updateOrgRequest.getActive());
         org.setName(updateOrgRequest.getName());
         orgRepository.save(org);
-        return generateOkResponse();
+        return ResponseGenerator.OK;
     }
 
     @Override
     public GeneralResponse delete(DeleteOrgRequest deleteOrgRequest) {
         Optional<NeighborOrg> foundedOrg = orgRepository.findByExtId(deleteOrgRequest.getExtId());
         if (!foundedOrg.isPresent()) {
-            return ResponseGenerator.ORG_NOTEXIST_ERROR;
+            return ResponseGenerator.generateOrgNotExistError();
         }
         NeighborOrg org = foundedOrg.get();
         List<NeighborAccount> accounts = accountService.findByOrg(org);
         if (accounts.isEmpty()) {
             orgRepository.delete(org);
-            return generateOkResponse();
+            return ResponseGenerator.OK;
         } else if (accounts.size() == 1 && accounts.contains(accountService.findDefaultByOrgIdAndOwnerPhone(org.getId(), "0"))) {
             accountService.delete(accounts.get(0));
             orgRepository.delete(org);
-            return generateOkResponse();
+            return ResponseGenerator.OK;
         }
 
-        return generateHasLinkedEntitiesError();
+        return ResponseGenerator.generateOrgHasLinkedEntitiesError();
     }
 
     @Override
@@ -86,28 +84,14 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     public OrgDto getById(GetOrgByIdRequest id) {
-        Optional<NeighborOrg> byExtId = orgRepository.findByExtId(id.getId());
+        return getById(id.getId());
+    }
+
+    @Override
+    public OrgDto getById(String extId) {
+        Optional<NeighborOrg> byExtId = orgRepository.findByExtId(extId);
         if (byExtId.isPresent()) return orgMapper.orgToOrgDto(byExtId.get());
         else return null;//todo ???
     }
 
-    private GeneralResponse generateOkResponse() {
-        return new GeneralResponse(200, null);
-    }
-
-    private GeneralResponse generateAlreadyExistError() {
-        JsonError error = new JsonError();
-        error.setCode(ErrorCode.ORG_WITH_EXTID_ALREADY_EXISTS);
-        error.setMessage("There is already exist org with given ext_id");
-        GeneralResponse errorResponse = new GeneralResponse(400, error);
-        return errorResponse;
-    }
-
-    private GeneralResponse generateHasLinkedEntitiesError() {
-        JsonError error = new JsonError();
-        error.setCode(ErrorCode.ORG_HAS_LINKED_ENTITIES);
-        error.setMessage("There are exist non default accounts linked to given org");
-        GeneralResponse errorResponse = new GeneralResponse(400, error);
-        return errorResponse;
-    }
 }

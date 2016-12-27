@@ -57,7 +57,7 @@ public class OrgControllerTest {
         CreateOrgRequest org = new CreateOrgRequest();
         org.setExtId("unique_id");
         org.setName("org_name");
-        GeneralResponse response = orgController.create(org);
+        GeneralResponse response = orgController.create(org).getBody();
 
         GeneralResponse expectedRespose = new GeneralResponse(201, null);
         assertEquals("code should be 201", expectedRespose.getHttpCode(), response.getHttpCode());
@@ -73,22 +73,10 @@ public class OrgControllerTest {
         assertEquals("DB should have saved org", expectedOrg, actualOrg.get());
         NeighborAccount actualAccount = accountRepository.findDefaultByOrgIdAndOwnerPhone(actualOrg.get().getId(), "0");
 
-        NeighborAccount expectedAccount = accountService.defaultForOrg(actualOrg.get().getId());
+        NeighborAccount expectedAccount = accountService.defaultForOrg(actualOrg.get());
         expectedAccount.setCreatedOn(actualAccount.getCreatedOn());
         expectedAccount.setId(actualAccount.getId());
         assertEquals("DB should have default account", expectedAccount, actualAccount);
-
-//        Optional<NeighborUser> optionalUser = userRepository.findByAccountId(actualAccount.getId())
-//                .stream()
-//                .filter(user -> "0".equals(user.getLogin()))
-//                .findFirst();
-//        assertTrue("Default account should have default user", optionalUser.isPresent());
-//
-//        Optional<NeighborRole> optionalRole = roleRepository.findByUserId(optionalUser.get().getId())
-//                .stream()
-//                .filter(role -> RoleEnum.NB_OPERATOR == role.getUserRole())
-//                .findFirst();
-//        assertTrue("Default user should have NB_OPERATOR role", optionalRole.isPresent());
     }
 
     @Test
@@ -98,7 +86,7 @@ public class OrgControllerTest {
         CreateOrgRequest org2 = new CreateOrgRequest();
         org2.setExtId("nonunique_id");
         org2.setName("org_name");
-        GeneralResponse response = orgController.create(org2);
+        GeneralResponse response = orgController.create(org2).getBody();
         assertNotNull("response should contain error", response.getJsonError());
 
         GeneralResponse expectedResponse = new GeneralResponse();
@@ -122,7 +110,7 @@ public class OrgControllerTest {
         updateOrgRequest.setActive(false);
         updateOrgRequest.setName("updated_name");
         updateOrgRequest.setExtId(org1.getExtId());
-        GeneralResponse actualResponse = orgController.update(updateOrgRequest);
+        GeneralResponse actualResponse = orgController.update(updateOrgRequest).getBody();
         GeneralResponse expectedResponse = new GeneralResponse(200, null);
         assertEquals("should return status 200 without error", expectedResponse, actualResponse);
 
@@ -144,7 +132,7 @@ public class OrgControllerTest {
         updateOrgRequest.setExtId("non_existing_id");
         updateOrgRequest.setActive(false);
         updateOrgRequest.setName("new_name");
-        GeneralResponse actualResponse = orgController.update(updateOrgRequest);
+        GeneralResponse actualResponse = orgController.update(updateOrgRequest).getBody();
         JsonError error = new JsonError();
         error.setCode(ErrorCode.ORG_WITH_EXTID_NOT_FOUND);
         error.setMessage("There is no org with given ext_id");
@@ -159,7 +147,7 @@ public class OrgControllerTest {
         persistOrg(extId);
         DeleteOrgRequest deleteRequest = new DeleteOrgRequest();
         deleteRequest.setExtId(extId);
-        GeneralResponse actualResponse = orgController.delete(deleteRequest);
+        GeneralResponse actualResponse = orgController.delete(deleteRequest).getBody();
         GeneralResponse expectedResponse = new GeneralResponse(200, null);
         assertEquals("should return success on delete existing", expectedResponse, actualResponse);
     }
@@ -173,10 +161,12 @@ public class OrgControllerTest {
         NeighborOrg org = foundedOrg.get();
         NeighborAccount account = new NeighborAccount();
         account.setOrg(org);
+        account.setAccountNumber("accountname");
+        account.setAccountUrn("org_to_delete:accountname");
         accountService.createAccount(account);
         DeleteOrgRequest deleteRequest = new DeleteOrgRequest();
         deleteRequest.setExtId(extId);
-        GeneralResponse actualResponse = orgController.delete(deleteRequest);
+        GeneralResponse actualResponse = orgController.delete(deleteRequest).getBody();
         assertNotNull("response should contain jsonError", actualResponse.getJsonError());
 
         GeneralResponse expectedResponse = new GeneralResponse();
@@ -192,13 +182,13 @@ public class OrgControllerTest {
 
     @Test
     public void shouldReturnListOfOrgs() {
-        List<OrgDto> actualResult = orgController.list();
+        List<OrgDto> actualResult = orgController.list().getBody();
         int beforeSize = actualResult.size();
         CreateOrgRequest org = new CreateOrgRequest();
         org.setExtId("unique_id");
         org.setName("org_name");
         orgController.create(org);
-        actualResult = orgController.list();
+        actualResult = orgController.list().getBody();
         assertEquals("should return list with +1 org", beforeSize+1, actualResult.size());
         OrgDto dto = new OrgDto();
         dto.setActive(true);
@@ -213,11 +203,11 @@ public class OrgControllerTest {
         persistOrg(uniqueId);
         GetOrgByIdRequest request = new GetOrgByIdRequest();
         request.setId(uniqueId);
-        OrgDto orgDto = orgController.getById(request);
+        OrgDto orgDto = orgController.getById(request).getBody();
         assertNotNull("should found org", orgDto);
         GetOrgByIdRequest request2 = new GetOrgByIdRequest();
         request.setId("non exist id");
-        OrgDto orgDto2 = orgController.getById(request);
+        OrgDto orgDto2 = orgController.getById(request).getBody();
         assertNull("should return exception", orgDto2);
     }
 

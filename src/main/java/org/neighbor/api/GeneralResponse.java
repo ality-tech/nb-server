@@ -1,13 +1,18 @@
 package org.neighbor.api;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GeneralResponse {
 
     private int httpCode;
     private JsonError jsonError;
+    public static GeneralResponse OK = new GeneralResponse(200, null);
+    public static GeneralResponse CREATED = new GeneralResponse(201, null);
+    public String token;//todo refactor me!!!
 
     public GeneralResponse() {
     }
@@ -31,6 +36,14 @@ public class GeneralResponse {
 
     public void setJsonError(JsonError jsonError) {
         this.jsonError = jsonError;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override

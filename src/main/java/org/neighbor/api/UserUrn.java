@@ -20,19 +20,16 @@ public class UserUrn {
         accountUrn = new AccountUrn(urn);
     }
 
-    public String getLogin() {
-        return login;
+    public String getUrn() {
+        return login + ":" + accountUrn.getUrn();
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public String getLogin() {
+        return login;
     }
 
     public AccountUrn getAccountUrn() {
         return accountUrn;
     }
 
-    public void setAccountUrn(AccountUrn accountUrn) {
-        this.accountUrn = accountUrn;
-    }
 }

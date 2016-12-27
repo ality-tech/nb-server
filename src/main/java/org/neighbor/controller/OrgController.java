@@ -3,8 +3,11 @@ package org.neighbor.controller;
 import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.dtos.*;
 import org.neighbor.service.OrgService;
+import org.neighbor.utils.ResponseWrapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,28 +23,34 @@ public class OrgController {
     private OrgService orgService;
 
     @RequestMapping(value = "/create")
-    public GeneralResponse create(@RequestBody CreateOrgRequest request) {
-        return orgService.create(request);
+    public ResponseEntity<GeneralResponse> create(@RequestBody CreateOrgRequest request) {
+        GeneralResponse response = orgService.create(request);
+        return ResponseWrapUtil.wrap(response);
     }
 
     @RequestMapping(value = "/update")
-    public GeneralResponse update(UpdateOrgRequest updateOrgRequest) {
-        return orgService.update(updateOrgRequest);
+    public ResponseEntity<GeneralResponse> update(UpdateOrgRequest updateOrgRequest) {
+        return ResponseWrapUtil.wrap(orgService.update(updateOrgRequest));
     }
 
     @RequestMapping(value = "/delete")
-    public GeneralResponse delete(DeleteOrgRequest deleteOrgRequest) {
-        return orgService.delete(deleteOrgRequest);
+    public ResponseEntity<GeneralResponse> delete(DeleteOrgRequest deleteOrgRequest) {
+        return ResponseWrapUtil.wrap(orgService.delete(deleteOrgRequest));
     }
 
     @RequestMapping(value = "/list")
-    public List<OrgDto> list() {
-        return orgService.findAll();
+    public ResponseEntity<List<OrgDto>> list() {
+        return ResponseEntity.ok(orgService.findAll());
     }
 
     @RequestMapping(value = "/get-by-id")
-    public OrgDto getById(GetOrgByIdRequest id) {
-        return orgService.getById(id);
+    public ResponseEntity<OrgDto> getById(GetOrgByIdRequest id) {
+        OrgDto dto = orgService.getById(id);
+        if (dto != null) {
+            return ResponseEntity.ok(dto);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
