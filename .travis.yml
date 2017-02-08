@@ -1,5 +1,8 @@
 language: java
 
+env:
+  - spring.profiles.active=travis
+
 cache:
   directories:
   - .autoconf
