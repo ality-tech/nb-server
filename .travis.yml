@@ -1,8 +1,5 @@
 language: java
 
-env:
-  - SPRING_PROFILES_ACTIVE=travis
-
 cache:
   directories:
   - .autoconf
