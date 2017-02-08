@@ -1,4 +1,4 @@
-package org.neighbor.service;
+package org.neighbor.service.impl;
 
 import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.dtos.AuthCheckRequest;
@@ -6,6 +6,9 @@ import org.neighbor.api.dtos.AuthConfirmRequest;
 import org.neighbor.api.dtos.AuthRegisterRequest;
 import org.neighbor.entity.*;
 import org.neighbor.repository.*;
+import org.neighbor.service.AccountService;
+import org.neighbor.service.AuthService;
+import org.neighbor.service.UserService;
 import org.neighbor.utils.ResponseGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
     private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    private final static SecureRandom random  = new SecureRandom();;
+    private final static SecureRandom random  = new SecureRandom();
 
     @Override
     public GeneralResponse check(AuthCheckRequest request) {

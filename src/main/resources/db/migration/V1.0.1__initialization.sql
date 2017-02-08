@@ -69,3 +69,6 @@ CREATE TABLE neighbor_user_status_history
   user_id           BIGINT,
   CONSTRAINT fkr3pyt4kgm5en2x9mldrce7gq7 FOREIGN KEY (user_id) REFERENCES neighbor_user (id)
 );
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN schema nb_server TO nb_server;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN schema nb_server TO nb_server;

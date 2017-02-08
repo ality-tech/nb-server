@@ -1,4 +1,4 @@
-package org.neighbor.service;
+package org.neighbor.service.impl;
 
 import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.dtos.CreateAccountRequest;
@@ -7,6 +7,8 @@ import org.neighbor.entity.NeighborOrg;
 import org.neighbor.mappers.CreateAccountRequestToAccount;
 import org.neighbor.repository.AccountRepository;
 import org.neighbor.repository.OrgRepository;
+import org.neighbor.service.AccountService;
+import org.neighbor.service.UserService;
 import org.neighbor.utils.ResponseGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
