@@ -1,0 +1,29 @@
+<configuration>
+    <property resource="application.properties" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%X{user}] %highlight(%-5level) %cyan(%logger) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--
+    <appender name="stash" class="net.logstash.logback.appender.LogstashSocketAppender">
+        <host>ec2-35-156-0-48.eu-central-1.compute.amazonaws.com</host>
+        <port>5000</port> -->
+        <!--
+        <host>${logstash.host}</host>
+        <port>${logstash.port}</port>
+        -->
+    <!--
+        <customFields>{"context": "${server.contextPath}" }</customFields>
+    </appender>
+    -->
+
+    <root level="ERROR">
+        <appender-ref ref="STDOUT" />
+        <!-- <appender-ref ref="stash" /> -->
+    </root>
+</configuration>
