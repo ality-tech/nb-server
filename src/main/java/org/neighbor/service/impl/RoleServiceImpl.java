@@ -1,8 +1,9 @@
-package org.neighbor.service;
+package org.neighbor.service.impl;
 
 import org.neighbor.entity.NeighborRole;
 import org.neighbor.entity.RoleEnum;
 import org.neighbor.repository.RoleRepository;
+import org.neighbor.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

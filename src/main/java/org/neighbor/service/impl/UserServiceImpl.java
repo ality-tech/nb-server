@@ -1,4 +1,4 @@
-package org.neighbor.service;
+package org.neighbor.service.impl;
 
 import org.neighbor.api.AccountUrn;
 import org.neighbor.api.GeneralResponse;
@@ -8,6 +8,8 @@ import org.neighbor.api.dtos.UserDto;
 import org.neighbor.entity.NeighborUser;
 import org.neighbor.mappers.NeighborUserToUserDto;
 import org.neighbor.repository.UserRepository;
+import org.neighbor.service.RoleService;
+import org.neighbor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

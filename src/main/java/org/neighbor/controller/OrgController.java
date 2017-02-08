@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -22,17 +23,20 @@ public class OrgController {
     @Autowired
     private OrgService orgService;
 
+    @ApiIgnore
     @RequestMapping(value = "/create")
     public ResponseEntity<GeneralResponse> create(@RequestBody CreateOrgRequest request) {
         GeneralResponse response = orgService.create(request);
         return ResponseWrapUtil.wrap(response);
     }
 
+    @ApiIgnore
     @RequestMapping(value = "/update")
     public ResponseEntity<GeneralResponse> update(UpdateOrgRequest updateOrgRequest) {
         return ResponseWrapUtil.wrap(orgService.update(updateOrgRequest));
     }
 
+    @ApiIgnore
     @RequestMapping(value = "/delete")
     public ResponseEntity<GeneralResponse> delete(DeleteOrgRequest deleteOrgRequest) {
         return ResponseWrapUtil.wrap(orgService.delete(deleteOrgRequest));
@@ -43,6 +47,7 @@ public class OrgController {
         return ResponseEntity.ok(orgService.findAll());
     }
 
+    @ApiIgnore
     @RequestMapping(value = "/get-by-id")
     public ResponseEntity<OrgDto> getById(GetOrgByIdRequest id) {
         OrgDto dto = orgService.getById(id);

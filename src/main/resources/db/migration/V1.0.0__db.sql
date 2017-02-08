@@ -1,0 +1,16 @@
+DO $$
+
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_roles WHERE rolname='nb_server'
+    ) THEN
+    CREATE USER nb_server WITH NOSUPERUSER NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD 'pKAhppfVvu8z9YY7m2AECjTGpza0onZPeNO7p98r';
+END IF;
+
+END$$;
+
+CREATE SCHEMA IF NOT EXISTS nb_server;
+
+GRANT ALL PRIVILEGES ON SCHEMA nb_server TO nb_server;
+GRANT ALL PRIVILEGES ON ALL TABLES IN schema nb_server TO nb_server;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN schema nb_server TO nb_server;
