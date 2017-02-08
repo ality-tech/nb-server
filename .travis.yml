@@ -1,0 +1,17 @@
+language: java
+
+cache:
+  directories:
+  - .autoconf
+  - $HOME/.m2
+
+services:
+  - docker
+
+before_install:
+  - docker pull postgres
+  - docker run --name nb-server -e POSTGRES_PASSWORD=nb_root -e POSTGRES_USER=nb_root -e POSTGRES_DB=nb_server -p 2222:5432 --restart=always -d postgres
+  - docker ps -a
+
+install:
+  - mvn clean test
