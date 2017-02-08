@@ -1,4 +1,4 @@
-package org.neighbor.service;
+package org.neighbor.service.impl;
 
 import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.dtos.*;
@@ -6,6 +6,8 @@ import org.neighbor.entity.NeighborAccount;
 import org.neighbor.entity.NeighborOrg;
 import org.neighbor.mappers.NeighborOrgToOrgDto;
 import org.neighbor.repository.OrgRepository;
+import org.neighbor.service.AccountService;
+import org.neighbor.service.OrgService;
 import org.neighbor.utils.ResponseGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

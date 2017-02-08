@@ -1,4 +1,4 @@
-package org.neighbor.service;
+package org.neighbor.service.impl;
 
 import org.neighbor.entity.ActivationStatus;
 import org.neighbor.entity.NeighborRole;
