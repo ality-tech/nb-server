@@ -16,11 +16,13 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping(value = "/account", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+@ApiIgnore
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
 
+    @ApiIgnore
     @RequestMapping(value = "/create")
     public ResponseEntity<GeneralResponse> create(@RequestBody CreateAccountRequest createAccountRequest) {
         return ResponseWrapUtil.wrap(accountService.createAccount(createAccountRequest));

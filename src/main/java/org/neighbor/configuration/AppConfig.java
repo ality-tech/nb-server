@@ -1,56 +1,25 @@
 package org.neighbor.configuration;
 
-import org.flywaydb.core.Flyway;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.autoconfigure.flyway.FlywayDataSource;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.*;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import com.google.common.base.Predicates;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
 @Configuration
 @EnableSwagger2
-@ComponentScan({"org.neighbor.service", "org.neighbor.controller", "org.neighbor.mappers"})
-@EntityScan("org.neighbor.entity")
-@EnableJpaRepositories("org.neighbor.repository")
-@Import(SecurityConfig.class)
+@Import({
+        DataConfig.class,
+        ServiceConfig.class,
+        ControllerConfig.class,
+        MapperConfig.class,
+        SecurityConfig.class,
+})
 public class AppConfig {
-
-    /*@Bean(initMethod = "migrate")
-    Flyway flyway() {
-        Flyway flyway = new Flyway();
-        flyway.setBaselineOnMigrate(true);
-        flyway.setDataSource(dataSource());
-        return flyway;
-    }
-
-    @Primary
-    @Bean(name = "dataSource")
-    @FlywayDataSource
-    @ConfigurationProperties("spring.datasource")
-    public DataSource dataSource() {
-        return DataSourceBuilder.create().build();
-    }
-
-    @Primary
-    @Bean
-    @DependsOn("flyway")
-    EntityManagerFactory entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
-        bean.setDataSource(dataSource());
-// other configurations
-        return bean.getObject();
-    }*/
 
     @Bean
     public Docket api() {
@@ -58,6 +27,7 @@ public class AppConfig {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
+                .paths(Predicates.not(PathSelectors.regex("/error"))) // Exclude Spring error controllers
                 .build();
     }
 }
