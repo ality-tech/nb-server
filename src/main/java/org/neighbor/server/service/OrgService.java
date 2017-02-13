@@ -1,7 +1,7 @@
 package org.neighbor.server.service;
 
-import org.neighbor.api.GeneralResponse;
-import org.neighbor.api.dtos.*;
+import org.neighbor.api.*;
+import org.neighbor.api.organizaton.*;
 
 import java.util.List;
 

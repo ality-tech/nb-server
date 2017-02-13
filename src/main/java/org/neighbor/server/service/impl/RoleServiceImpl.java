@@ -1,6 +1,6 @@
 package org.neighbor.server.service.impl;
 
-import org.neighbor.server.entity.NeighborRoleEntity;
+import org.neighbor.server.entity.RoleEntity;
 import org.neighbor.api.RoleEnum;
 import org.neighbor.server.repository.RoleRepository;
 import org.neighbor.server.service.RoleService;
@@ -15,11 +15,11 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void createDefaultRoleForUserId(Long userId) {
-        NeighborRoleEntity role = roleRepository.save(defaultRoleForUserId(userId));
+        RoleEntity role = roleRepository.save(defaultRoleForUserId(userId));
     }
 
-    private NeighborRoleEntity defaultRoleForUserId(Long userId) {
-        NeighborRoleEntity role = new NeighborRoleEntity();
+    private RoleEntity defaultRoleForUserId(Long userId) {
+        RoleEntity role = new RoleEntity();
         role.setUserId(userId);
         role.setUserRole(RoleEnum.ROLE_NB_OPERATOR);
         return role;

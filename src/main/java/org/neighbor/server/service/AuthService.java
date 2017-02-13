@@ -1,14 +1,14 @@
 package org.neighbor.server.service;
 
 import org.neighbor.api.GeneralResponse;
-import org.neighbor.api.dtos.AuthCheckRequest;
-import org.neighbor.api.dtos.AuthConfirmRequest;
-import org.neighbor.api.dtos.AuthRegisterRequest;
+import org.neighbor.api.auth.AuthCheckRequest;
+import org.neighbor.api.auth.AuthConfirmRequest;
+import org.neighbor.api.auth.AuthRegisterRequest;
 
 public interface AuthService {
     String SEPARATOR = ":";
 
-    GeneralResponse check(AuthCheckRequest request);
+    void check();
 
     GeneralResponse register(AuthRegisterRequest request);
 

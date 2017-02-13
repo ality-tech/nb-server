@@ -1,8 +1,9 @@
 package org.neighbor.server.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.neighbor.server.configuration.SecurityConfig;
-import org.neighbor.server.utils.ResponseGenerator;
+import org.neighbor.api.ErrorCode;
+import org.neighbor.api.JsonError;
+import org.neighbor.server.config.SecurityConfig;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
@@ -13,6 +14,12 @@ import java.io.IOException;
 
 public class CustomBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
 
+    private ObjectMapper mapper;
+
+    public CustomBasicAuthenticationEntryPoint() {
+        this.mapper = new ObjectMapper();
+    }
+
     @Override
     public void commence(final HttpServletRequest request,
                          final HttpServletResponse response,
@@ -20,10 +27,12 @@ public class CustomBasicAuthenticationEntryPoint extends BasicAuthenticationEntr
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.addHeader("WWW-Authenticate", "Basic realm=" + getRealmName() + "");
         response.setContentType("application/json");
-        ObjectMapper mapper = new ObjectMapper();
-        response.getOutputStream().println(
-                mapper.writeValueAsString(ResponseGenerator.generateUnauthorizedError())
-        );
+
+        JsonError error = new JsonError();
+        error.setCode(ErrorCode.UNAUTHORIZED);
+        error.setMessage("User is not authorized");
+
+        response.getOutputStream().println(mapper.writeValueAsString(error));
     }
 
     @Override

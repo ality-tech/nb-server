@@ -2,11 +2,11 @@ package org.neighbor.server.controller;
 
 import io.swagger.annotations.ApiParam;
 import org.neighbor.api.GeneralResponse;
-import org.neighbor.api.dtos.AuthCheckRequest;
-import org.neighbor.api.dtos.AuthConfirmRequest;
-import org.neighbor.api.dtos.AuthRegisterRequest;
+import org.neighbor.api.auth.AuthCheckRequest;
+import org.neighbor.api.auth.AuthConfirmRequest;
+import org.neighbor.api.auth.AuthRegisterRequest;
 import org.neighbor.server.service.AuthService;
-import org.neighbor.server.utils.ResponseWrapUtil;
+import org.neighbor.server.util.ResponseWrapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +24,8 @@ public class AuthController {
     private AuthService authService;
 
     @RequestMapping(value = "/check")
-    public ResponseEntity<GeneralResponse> check(@RequestBody @ApiParam(required = false) AuthCheckRequest request) {
-        GeneralResponse response = authService.check(request);
-        return ResponseWrapUtil.wrap(response);
+    public void check() {
+        authService.check();
     }
 
     @RequestMapping(value = "/register")

@@ -1,32 +1,32 @@
 package org.neighbor.server.service;
 
 import org.neighbor.api.GeneralResponse;
-import org.neighbor.api.dtos.CreateAccountRequest;
-import org.neighbor.server.entity.NeighborAccountEntity;
-import org.neighbor.server.entity.NeighborOrgEntity;
+import org.neighbor.api.account.CreateAccountRequest;
+import org.neighbor.server.entity.AccountEntity;
+import org.neighbor.server.entity.OrgEntity;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface AccountService {
 
-    NeighborAccountEntity createAccount(NeighborAccountEntity account);
+    AccountEntity createAccount(AccountEntity account);
 
     GeneralResponse createAccount(CreateAccountRequest createAccountRequest);
 
-    void createDefaultAccountForOrgId(NeighborOrgEntity id);
+    void createDefaultAccountForOrgId(OrgEntity id);
 
-    NeighborAccountEntity defaultForOrg(NeighborOrgEntity orgId);
+    AccountEntity defaultForOrg(OrgEntity orgId);
 
-    List<NeighborAccountEntity> findByOrg(NeighborOrgEntity byExtId);
+    List<AccountEntity> findByOrg(OrgEntity byExtId);
 
-    Iterable<NeighborAccountEntity> listByFilter(Object filter);
+    Iterable<AccountEntity> listByFilter(Object filter);
 
-    void delete(NeighborAccountEntity account);
+    void delete(AccountEntity account);
 
-    NeighborAccountEntity findDefaultByOrgIdAndOwnerPhone(Long orgId, String ownerPhone);
+    AccountEntity findDefaultByOrgIdAndOwnerPhone(Long orgId, String ownerPhone);
 
-    Optional<NeighborAccountEntity> findById(Long accountId);
+    Optional<AccountEntity> findById(Long accountId);
 
-    Optional<NeighborAccountEntity> findOrgAndAccountNumber(Long orgId, String accountNumber);
+    Optional<AccountEntity> findOrgAndAccountNumber(Long orgId, String accountNumber);
 }

@@ -1,6 +1,6 @@
 package org.neighbor.server.repository;
 
-import org.neighbor.server.entity.NeighborActivationTokenEntity;
+import org.neighbor.server.entity.ActivationTokenEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Transactional
-public interface TokenRepository extends CrudRepository<NeighborActivationTokenEntity, Long> {
-    List<NeighborActivationTokenEntity> findByUserId(Long userId);
+public interface TokenRepository extends CrudRepository<ActivationTokenEntity, Long> {
+    List<ActivationTokenEntity> findByUserId(Long userId);
 
-    Optional<NeighborActivationTokenEntity> findByToken(String token);
+    Optional<ActivationTokenEntity> findByToken(String token);
 }

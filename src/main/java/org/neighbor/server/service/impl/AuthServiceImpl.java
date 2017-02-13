@@ -1,18 +1,18 @@
 package org.neighbor.server.service.impl;
 
-import org.neighbor.api.ActivationStatus;
+import org.neighbor.api.user.ActivationStatus;
 import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.RoleEnum;
 import org.neighbor.api.TokenStatus;
-import org.neighbor.api.dtos.AuthCheckRequest;
-import org.neighbor.api.dtos.AuthConfirmRequest;
-import org.neighbor.api.dtos.AuthRegisterRequest;
+import org.neighbor.api.auth.AuthCheckRequest;
+import org.neighbor.api.auth.AuthConfirmRequest;
+import org.neighbor.api.auth.AuthRegisterRequest;
 import org.neighbor.server.entity.*;
 import org.neighbor.server.repository.*;
 import org.neighbor.server.service.AccountService;
 import org.neighbor.server.service.AuthService;
 import org.neighbor.server.service.UserService;
-import org.neighbor.server.utils.ResponseGenerator;
+import org.neighbor.server.util.ResponseGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,46 +43,46 @@ public class AuthServiceImpl implements AuthService {
     private final static SecureRandom random  = new SecureRandom();
 
     @Override
-    public GeneralResponse check(AuthCheckRequest request) {
-        return ResponseGenerator.OK;
+    public void check() {
+        //logging
     }
 
     @Override
     public GeneralResponse register(AuthRegisterRequest request) {
         String login = request.getLogin();
-        Optional<NeighborUserEntity> userByLogin = userService.getUserByLogin(login);
+        Optional<UserEntity> userByLogin = userService.getUserByLogin(login);
 
         //todo cover by tests
         if (userByLogin.isPresent()) {
             return generateUserExistResponse(userByLogin.get());
         }
 
-        Optional<NeighborOrgEntity> orgById = orgRepository.findByExtId(request.getExtId());
+        Optional<OrgEntity> orgById = orgRepository.findByExtId(request.getExtId());
         if (!orgById.isPresent()) {
             return ResponseGenerator.generateOrgNotExistError();
         }
 
-        NeighborOrgEntity org = orgById.get();
+        OrgEntity org = orgById.get();
         //todo cover by tests
         if (!Boolean.TRUE.equals(org.getActive())) {
             return ResponseGenerator.generateOrgBlockedError();
         }
 
-        Optional<NeighborAccountEntity> accountById = accountService.findOrgAndAccountNumber(org.getId(), request.getAccountNumber());
+        Optional<AccountEntity> accountById = accountService.findOrgAndAccountNumber(org.getId(), request.getAccountNumber());
         if (!accountById.isPresent()) {
             return ResponseGenerator.generateAccountNotExistError();
         }
 
-        NeighborAccountEntity account = accountById.get();
+        AccountEntity account = accountById.get();
         if (!Boolean.TRUE.equals(account.getActive())) {
             return ResponseGenerator.generateAccountBlockedError();
         }
 
-        NeighborUserEntity user = persistUser(request, account);
+        UserEntity user = persistUser(request, account);
         persistHistory(user);
-        NeighborActivationTokenEntity token = persistToken(user);
+        ActivationTokenEntity token = persistToken(user);
 
-        NeighborRoleEntity role = new NeighborRoleEntity();
+        RoleEntity role = new RoleEntity();
         role.setUserRole(RoleEnum.ROLE_NB_USER);
         role.setUser(user);
         roleRepository.save(role);
@@ -93,9 +93,9 @@ public class AuthServiceImpl implements AuthService {
         return ok;
     }
 
-    private NeighborUserEntity persistUser(AuthRegisterRequest request, NeighborAccountEntity account) {
+    private UserEntity persistUser(AuthRegisterRequest request, AccountEntity account) {
         String login = request.getLogin();
-        NeighborUserEntity user = new NeighborUserEntity();
+        UserEntity user = new UserEntity();
         user.setAccount(account);
         user.setLogin(request.getLogin());
         user.setPinCode(passwordEncoder.encode(request.getPinCode()));
@@ -108,8 +108,8 @@ public class AuthServiceImpl implements AuthService {
         return user;
     }
 
-    private NeighborActivationTokenEntity persistToken(NeighborUserEntity user) {
-        NeighborActivationTokenEntity token = new NeighborActivationTokenEntity();
+    private ActivationTokenEntity persistToken(UserEntity user) {
+        ActivationTokenEntity token = new ActivationTokenEntity();
         token.setCreatedOn(new Date());
         token.setTokenStatus(TokenStatus.SENT);
         token.setToken(generateRandomPin());
@@ -129,8 +129,8 @@ public class AuthServiceImpl implements AuthService {
         return String.valueOf(value).substring(0, 5);
     }
 
-    private NeighborUserStatusHistoryEntity persistHistory(NeighborUserEntity user) {
-        NeighborUserStatusHistoryEntity history = new NeighborUserStatusHistoryEntity();
+    private UserStatusHistoryEntity persistHistory(UserEntity user) {
+        UserStatusHistoryEntity history = new UserStatusHistoryEntity();
         history.setActivationStatus(user.getActivationStatus());
         history.setCreatedOn(new Date());
         history.setUser(user);
@@ -139,7 +139,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     //todo cover by tests
-    private GeneralResponse generateUserExistResponse(NeighborUserEntity user) {
+    private GeneralResponse generateUserExistResponse(UserEntity user) {
         if (user.getActivationStatus() == null) {
             return ResponseGenerator.generateUserActiveError();
         }
@@ -158,27 +158,27 @@ public class AuthServiceImpl implements AuthService {
     public GeneralResponse confirm(AuthConfirmRequest confirmRequest) {
 
         String login = confirmRequest.getLogin();
-        Optional<NeighborActivationTokenEntity> foundToken = tokenRepository.findByToken(confirmRequest.getToken());
+        Optional<ActivationTokenEntity> foundToken = tokenRepository.findByToken(confirmRequest.getToken());
         if (!foundToken.isPresent())
             return ResponseGenerator.generateSecurityViolationError();
-        NeighborActivationTokenEntity token = foundToken.get();
+        ActivationTokenEntity token = foundToken.get();
 
         if (TokenStatus.SENT != token.getTokenStatus()){
             return ResponseGenerator.generateSecurityViolationError();
         }
 
-        Optional<NeighborUserEntity> userByLogin = userService.getUserByLogin(login);
+        Optional<UserEntity> userByLogin = userService.getUserByLogin(login);
         if (!userByLogin.isPresent())
             return ResponseGenerator.generateSecurityViolationError();
 
-        NeighborUserEntity user = userByLogin.get();
+        UserEntity user = userByLogin.get();
         if (!user.getId().equals(token.getUserId())){
             return ResponseGenerator.generateSecurityViolationError();
         }
 
         //ok
         token.setTokenStatus(TokenStatus.CONFIRMED);
-        NeighborUserStatusHistoryEntity history = new NeighborUserStatusHistoryEntity();
+        UserStatusHistoryEntity history = new UserStatusHistoryEntity();
         history.setCreatedOn(new Date());
         history.setUser(user);
         history.setActivationStatus(ActivationStatus.ACTIVE);
