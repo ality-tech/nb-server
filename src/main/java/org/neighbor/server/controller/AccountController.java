@@ -1,10 +1,10 @@
 package org.neighbor.server.controller;
 
 import org.neighbor.api.GeneralResponse;
-import org.neighbor.api.dtos.CreateAccountRequest;
-import org.neighbor.server.entity.NeighborAccountEntity;
+import org.neighbor.api.account.CreateAccountRequest;
+import org.neighbor.server.entity.AccountEntity;
 import org.neighbor.server.service.AccountService;
-import org.neighbor.server.utils.ResponseWrapUtil;
+import org.neighbor.server.util.ResponseWrapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,19 +30,19 @@ public class AccountController {
 
     @RequestMapping(value = "/update")
     @ApiIgnore
-    public NeighborAccountEntity update(@RequestBody Object account) {
-        return new NeighborAccountEntity();
+    public AccountEntity update(@RequestBody Object account) {
+        return new AccountEntity();
     }
 
     @RequestMapping(value = "/delete")
     @ApiIgnore
-    public NeighborAccountEntity delete(@RequestBody Object account) {
-        return new NeighborAccountEntity();
+    public AccountEntity delete(@RequestBody Object account) {
+        return new AccountEntity();
     }
 
     @RequestMapping(value = "/list-by-filter")
     @ApiIgnore
-    public Iterable<NeighborAccountEntity> listByFilter(@RequestBody Object filter) {
+    public Iterable<AccountEntity> listByFilter(@RequestBody Object filter) {
         return accountService.listByFilter(filter);
     }
 

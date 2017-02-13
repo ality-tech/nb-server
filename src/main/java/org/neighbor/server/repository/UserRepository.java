@@ -1,6 +1,6 @@
 package org.neighbor.server.repository;
 
-import org.neighbor.server.entity.NeighborUserEntity;
+import org.neighbor.server.entity.UserEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Transactional
-public interface UserRepository extends CrudRepository<NeighborUserEntity, Long> {
+public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
-    Optional<NeighborUserEntity> findByLogin(@Param("login") String login);
+    Optional<UserEntity> findByLogin(@Param("login") String login);
 
     @Query("")
-    Optional<NeighborUserEntity> findActiveByLogin(@Param("login") String login);
+    Optional<UserEntity> findActiveByLogin(@Param("login") String login);
 
-    List<NeighborUserEntity> findByAccountId(@Param("account_id")Long accountId);
+    List<UserEntity> findByAccountId(@Param("account_id")Long accountId);
 
-    Optional<NeighborUserEntity> findUserByLoginAndPinCode(@Param("login") String login, @Param("pinCode") String pinCode);
+    Optional<UserEntity> findUserByLoginAndPinCode(@Param("login") String login, @Param("pinCode") String pinCode);
 }

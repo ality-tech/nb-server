@@ -1,12 +1,12 @@
 package org.neighbor.server.service.impl;
 
-import org.neighbor.api.AccountUrn;
+import org.neighbor.api.account.AccountUrn;
 import org.neighbor.api.GeneralResponse;
-import org.neighbor.api.UserUrn;
-import org.neighbor.api.dtos.CreateUserRequest;
-import org.neighbor.api.dtos.UserDto;
-import org.neighbor.server.entity.NeighborUserEntity;
-import org.neighbor.server.mappers.NeighborUserToUserDto;
+import org.neighbor.api.user.UserUrn;
+import org.neighbor.api.user.CreateUserRequest;
+import org.neighbor.api.user.UserDto;
+import org.neighbor.server.entity.UserEntity;
+import org.neighbor.server.mapper.UserMapper;
 import org.neighbor.server.repository.UserRepository;
 import org.neighbor.server.service.RoleService;
 import org.neighbor.server.service.UserService;
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private NeighborUserToUserDto neighborUserToUserDto;
+    private UserMapper userMapper;
 
     @Autowired
     private UserRepository userRepository;
@@ -46,9 +46,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByUrn(String urn) {
         UserUrn userUrn = new UserUrn(urn);
-        Optional<NeighborUserEntity> neighborUser = userRepository.findByLogin(userUrn.getLogin());
+        Optional<UserEntity> neighborUser = userRepository.findByLogin(userUrn.getLogin());
         if (neighborUser.isPresent()) {
-            UserDto userDto = neighborUserToUserDto.userToUserDto(neighborUser.get());
+            UserDto userDto = userMapper.userToUserDto(neighborUser.get());
             return userDto;
         }
         return null;
@@ -60,17 +60,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateUser(NeighborUserEntity user) {
+    public boolean updateUser(UserEntity user) {
         return false;
     }
 
     @Override
-    public Optional<NeighborUserEntity> getUserByLoginAndPin(String login, String pin) {
+    public Optional<UserEntity> getUserByLoginAndPin(String login, String pin) {
         return userRepository.findUserByLoginAndPinCode(login, pin);
     }
 
     @Override
-    public Optional<NeighborUserEntity> getUserByLogin(String login) {
+    public Optional<UserEntity> getUserByLogin(String login) {
         return userRepository.findByLogin(login);
     }
 

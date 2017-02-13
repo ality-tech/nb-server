@@ -1,6 +1,6 @@
 package org.neighbor.server.repository;
 
-import org.neighbor.server.entity.NeighborAccountEntity;
+import org.neighbor.server.entity.AccountEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,15 +8,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Transactional
-public interface AccountRepository extends CrudRepository<NeighborAccountEntity, Long>{
+public interface AccountRepository extends CrudRepository<AccountEntity, Long>{
     //// FIXME: should be DEFAULT acc
-    NeighborAccountEntity findDefaultByOrgIdAndOwnerPhone(Long orgId, String ownerPhone);
+    AccountEntity findDefaultByOrgIdAndOwnerPhone(Long orgId, String ownerPhone);
 
-    List<NeighborAccountEntity> findByOrgId(Long orgId);
+    List<AccountEntity> findByOrgId(Long orgId);
 
-    List<NeighborAccountEntity> findDefaultByOrgIdAndAccountNumber(Long orgId, String accountNumber);
+    List<AccountEntity> findDefaultByOrgIdAndAccountNumber(Long orgId, String accountNumber);
 
-    Optional<NeighborAccountEntity> findByOrgIdAndAccountNumber(Long orgId, String accountNumber);
+    Optional<AccountEntity> findByOrgIdAndAccountNumber(Long orgId, String accountNumber);
 
-    Optional<NeighborAccountEntity> findById(Long accountId);
+    Optional<AccountEntity> findById(Long accountId);
 }

@@ -1,9 +1,9 @@
 package org.neighbor.server.controller;
 
-import org.neighbor.api.GeneralResponse;
-import org.neighbor.api.dtos.*;
+import org.neighbor.api.*;
+import org.neighbor.api.organizaton.*;
 import org.neighbor.server.service.OrgService;
-import org.neighbor.server.utils.ResponseWrapUtil;
+import org.neighbor.server.util.ResponseWrapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

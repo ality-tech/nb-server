@@ -1,8 +1,8 @@
 package org.neighbor.server.service.impl;
 
-import org.neighbor.api.ActivationStatus;
-import org.neighbor.server.entity.NeighborRoleEntity;
-import org.neighbor.server.entity.NeighborUserEntity;
+import org.neighbor.api.user.ActivationStatus;
+import org.neighbor.server.entity.RoleEntity;
+import org.neighbor.server.entity.UserEntity;
 import org.neighbor.server.repository.RoleRepository;
 import org.neighbor.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +31,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        Optional<NeighborUserEntity> byLogin = userRepository.findByLogin(s);
+        Optional<UserEntity> byLogin = userRepository.findByLogin(s);
         if (byLogin.isPresent()) {
-            NeighborUserEntity user = byLogin.get();
+            UserEntity user = byLogin.get();
             if (user.getActivationStatus() == ActivationStatus.ACTIVE) {
 
             }
-            List<NeighborRoleEntity> roles = roleRepository.findByUserId(user.getId());
+            List<RoleEntity> roles = roleRepository.findByUserId(user.getId());
             Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-            for (NeighborRoleEntity role : roles) {
+            for (RoleEntity role : roles) {
                 String role1 = role.getUserRole().name();
                 grantedAuthorities.add(new SimpleGrantedAuthority(role1));
             }

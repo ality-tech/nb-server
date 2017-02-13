@@ -1,6 +1,6 @@
 package org.neighbor.server;
 
-import org.neighbor.server.configuration.AppConfig;
+import org.neighbor.server.config.AppConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;

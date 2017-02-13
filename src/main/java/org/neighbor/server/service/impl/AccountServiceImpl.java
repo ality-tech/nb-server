@@ -1,15 +1,15 @@
 package org.neighbor.server.service.impl;
 
 import org.neighbor.api.GeneralResponse;
-import org.neighbor.api.dtos.CreateAccountRequest;
-import org.neighbor.server.entity.NeighborAccountEntity;
-import org.neighbor.server.entity.NeighborOrgEntity;
-import org.neighbor.server.mappers.CreateAccountRequestToAccount;
+import org.neighbor.api.account.CreateAccountRequest;
+import org.neighbor.server.entity.AccountEntity;
+import org.neighbor.server.entity.OrgEntity;
+import org.neighbor.server.mapper.AccountMapper;
 import org.neighbor.server.repository.AccountRepository;
 import org.neighbor.server.repository.OrgRepository;
 import org.neighbor.server.service.AccountService;
 import org.neighbor.server.service.UserService;
-import org.neighbor.server.utils.ResponseGenerator;
+import org.neighbor.server.util.ResponseGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,21 +30,21 @@ public class AccountServiceImpl implements AccountService {
     private UserService userService;
 
     @Autowired
-    private CreateAccountRequestToAccount requestToAccountMapper;
+    private AccountMapper accountMapper;
 
     @Override
-    public NeighborAccountEntity createAccount(NeighborAccountEntity account) {
+    public AccountEntity createAccount(AccountEntity account) {
         return accountRepository.save(account);
     }
 
     @Override
     public GeneralResponse createAccount(CreateAccountRequest createAccountRequest) {
-        Optional<NeighborOrgEntity> foundOrg = orgRepository.findByExtId(createAccountRequest.getOrgExtId());
+        Optional<OrgEntity> foundOrg = orgRepository.findByExtId(createAccountRequest.getOrgExtId());
         if (!foundOrg.isPresent())
             return ResponseGenerator.generateOrgNotExistError();
-        NeighborOrgEntity org = foundOrg.get();
+        OrgEntity org = foundOrg.get();
         accountRepository.findDefaultByOrgIdAndAccountNumber(org.getId(), createAccountRequest.getAccountNumber());
-        NeighborAccountEntity account = requestToAccountMapper.createAccountRequestToAccount(createAccountRequest);
+        AccountEntity account = accountMapper.createAccountRequestToAccount(createAccountRequest);
         String urn = createAccountRequest.getOrgExtId() + ":" + createAccountRequest.getAccountNumber();//todo
         account.setAccountUrn(urn);
         account.setOrg(org);
@@ -54,36 +54,36 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void createDefaultAccountForOrgId(NeighborOrgEntity org) {
-        NeighborAccountEntity account = createAccount(defaultForOrg(org));
+    public void createDefaultAccountForOrgId(OrgEntity org) {
+        AccountEntity account = createAccount(defaultForOrg(org));
 
 //        userService.createDefaultUserForAccountId(account.getId());
     }
 
     @Override
-    public Iterable<NeighborAccountEntity> listByFilter(Object filter) {
+    public Iterable<AccountEntity> listByFilter(Object filter) {
         //// FIXME
         return accountRepository.findAll();
     }
 
     @Override
-    public List<NeighborAccountEntity> findByOrg(NeighborOrgEntity byExtId) {
+    public List<AccountEntity> findByOrg(OrgEntity byExtId) {
         return accountRepository.findByOrgId(byExtId.getId());
     }
 
     @Override
-    public NeighborAccountEntity findDefaultByOrgIdAndOwnerPhone(Long orgId, String ownerPhone) {
+    public AccountEntity findDefaultByOrgIdAndOwnerPhone(Long orgId, String ownerPhone) {
         return accountRepository.findDefaultByOrgIdAndOwnerPhone(orgId, ownerPhone);
     }
 
     @Override
-    public void delete(NeighborAccountEntity account) {
+    public void delete(AccountEntity account) {
         accountRepository.delete(account);
     }
 
     @Override
-    public NeighborAccountEntity defaultForOrg(NeighborOrgEntity org) {
-        NeighborAccountEntity account = new NeighborAccountEntity();
+    public AccountEntity defaultForOrg(OrgEntity org) {
+        AccountEntity account = new AccountEntity();
         account.setOrg(org);
         account.setActive(true);
         account.setAccountNumber("0");
@@ -98,12 +98,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<NeighborAccountEntity> findById(Long id) {
+    public Optional<AccountEntity> findById(Long id) {
         return accountRepository.findById(id);
     }
 
     @Override
-    public Optional<NeighborAccountEntity> findOrgAndAccountNumber(Long orgId, String accountNumber) {
+    public Optional<AccountEntity> findOrgAndAccountNumber(Long orgId, String accountNumber) {
         return accountRepository.findByOrgIdAndAccountNumber(orgId, accountNumber);
     }
 
