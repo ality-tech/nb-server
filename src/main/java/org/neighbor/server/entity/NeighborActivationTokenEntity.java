@@ -9,16 +9,21 @@ import java.util.Date;
 public class NeighborActivationTokenEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
     @Column(name = "user_id")
     private Long userId;
     @ManyToOne(targetEntity = NeighborUserEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private NeighborUserEntity user;
+    @Column (name = "token")
     private String token;
     @Enumerated(EnumType.STRING)
+    @Column (name = "token_status")
     private TokenStatus tokenStatus;
+    @Column (name = "created_on")
     private Date createdOn;
+    @Column (name = "valid_to")
     private Date validTo;
 
 

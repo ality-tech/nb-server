@@ -11,19 +11,27 @@ import java.util.Objects;
 public class NeighborUserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="id")
     private Long id;
     @Column(name="account_id")
     private Long accountId;
     @ManyToOne(targetEntity = NeighborAccountEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private NeighborAccountEntity account;
+    @Column(name="user_urn")
     private String userUrn;
+    @Column(name="login")
     private String login;
+    @Column(name="pin_code")
     private String pinCode;
+    @Column(name="user_phone")
     private String userPhone;
     @Enumerated(EnumType.STRING)
+    @Column(name="activation_status")
     private ActivationStatus activationStatus;
+    @Column(name="created_on")
     private Date createdOn;
+    @Column(name="updated_on")
     private Date updatedOn;
 
     public Long getId() {

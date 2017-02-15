@@ -8,10 +8,12 @@ import javax.persistence.*;
 public class NeighborRoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
     @Column(name = "user_id")
     private Long userId;
     @Enumerated(EnumType.STRING)
+    @Column(name = "user_role")
     private RoleEnum userRole;
     @ManyToOne(targetEntity = NeighborUserEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", updatable = false, insertable = false)

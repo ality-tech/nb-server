@@ -9,6 +9,7 @@ import java.util.Date;
 public class NeighborUserStatusHistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
     @Column(name = "user_id")
     private Long usrId;
@@ -16,8 +17,11 @@ public class NeighborUserStatusHistoryEntity {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private NeighborUserEntity user;
     @Enumerated(EnumType.STRING)
+    @Column(name = "activation_status")
     private ActivationStatus activationStatus;
+    @Column(name = "created_on")
     private Date createdOn;
+    @Column(name = "remark")
     private String remark;
 
     public Long getId() {

@@ -9,25 +9,36 @@ import java.util.Objects;
 @Entity(name = "neighbor_account")
 public class NeighborAccountEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
     @Column(name = "org_id")
     private Long orgId;
     @ManyToOne(targetEntity = NeighborOrgEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "org_id", insertable = false, updatable = false)
     private NeighborOrgEntity org;
+    @Column(name = "account_number")
     private String accountNumber;
+    @Column(name = "account_urn")
     private String accountUrn;
+    @Column(name = "owner_phone")
     private String ownerPhone;
+    @Column(name = "address_street")
     private String addressStreet;
+    @Column(name = "address_building")
     private String addressBuilding;
+    @Column(name = "address_floor")
     private String addressFloor;
+    @Column(name = "address_flat")
     private String addressFlat;
+    @Column(name = "created_on")
     private Date createdOn;
+    @Column(name = "updated_on")
     private Date updatedOn;
+    @Column(name = "active")
     private Boolean isActive = true;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {
         return id;
     }
@@ -36,7 +47,6 @@ public class NeighborAccountEntity {
         this.id = id;
     }
 
-    @Column(name = "org_id")
     public Long getOrgId() {
         return orgId;
     }
@@ -45,8 +55,6 @@ public class NeighborAccountEntity {
         this.orgId = orgId;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "org_id", updatable = false, insertable = false)
     public NeighborOrgEntity getOrg() {
         return org;
     }
