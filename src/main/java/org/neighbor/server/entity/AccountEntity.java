@@ -9,6 +9,8 @@ import java.util.Objects;
 @Entity(name = "neighbor_account")
 public class AccountEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(name = "org_id")
     private Long orgId;
@@ -36,8 +38,6 @@ public class AccountEntity {
     @Column(name = "active")
     private Boolean isActive = true;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {
         return id;
     }
@@ -46,7 +46,6 @@ public class AccountEntity {
         this.id = id;
     }
 
-    @Column(name = "org_id")
     public Long getOrgId() {
         return orgId;
     }
@@ -55,8 +54,6 @@ public class AccountEntity {
         this.orgId = orgId;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "org_id", updatable = false, insertable = false)
     public OrgEntity getOrg() {
         return org;
     }
