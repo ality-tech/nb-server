@@ -17,13 +17,20 @@ public class UserEntity {
     @ManyToOne(targetEntity = AccountEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private AccountEntity account;
+    @Column(name="user_urn")
     private String userUrn;
+    @Column(name="login")
     private String login;
+    @Column(name="pin_code")
     private String pinCode;
+    @Column(name="user_phone")
     private String userPhone;
+    @Column(name="activation_status")
     @Enumerated(EnumType.STRING)
     private ActivationStatus activationStatus;
+    @Column(name="created_on")
     private Date createdOn;
+    @Column(name="updated_on")
     private Date updatedOn;
 
     public Long getId() {

@@ -15,9 +15,12 @@ public class UserStatusHistoryEntity {
     @ManyToOne(targetEntity = UserEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity user;
+    @Column(name = "activation_status")
     @Enumerated(EnumType.STRING)
     private ActivationStatus activationStatus;
+    @Column(name = "created_on")
     private Date createdOn;
+    @Column(name = "remark")
     private String remark;
 
     public Long getId() {

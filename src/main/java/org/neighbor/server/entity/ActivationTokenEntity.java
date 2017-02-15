@@ -15,10 +15,14 @@ public class ActivationTokenEntity {
     @ManyToOne(targetEntity = UserEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity user;
+    @Column(name = "token")
     private String token;
+    @Column(name = "token_status")
     @Enumerated(EnumType.STRING)
     private TokenStatus tokenStatus;
+    @Column(name = "created_on")
     private Date createdOn;
+    @Column(name = "valid_to")
     private Date validTo;
 
 
