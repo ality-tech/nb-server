@@ -3,10 +3,7 @@ package org.neighbor.server.entity;
 
 import com.google.common.base.MoreObjects;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity(name = "neighbor_org")
@@ -14,8 +11,11 @@ public class OrgEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(name="name")
     private String name;
+    @Column(name="ext_id")
     private String extId;
+    @Column(name="is_active")
     private Boolean isActive;
 
     public Long getId() {

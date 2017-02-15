@@ -15,15 +15,25 @@ public class AccountEntity {
     @ManyToOne(targetEntity = OrgEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "org_id", insertable = false, updatable = false)
     private OrgEntity org;
+    @Column(name = "account_number")
     private String accountNumber;
+    @Column(name = "account_urn")
     private String accountUrn;
+    @Column(name = "owner_phone")
     private String ownerPhone;
+    @Column(name = "address_street")
     private String addressStreet;
+    @Column(name = "address_building")
     private String addressBuilding;
+    @Column(name = "address_floor")
     private String addressFloor;
+    @Column(name = "address_flat")
     private String addressFlat;
+    @Column(name = "created_on")
     private Date createdOn;
+    @Column(name = "updated_on")
     private Date updatedOn;
+    @Column(name = "active")
     private Boolean isActive = true;
 
     @Id

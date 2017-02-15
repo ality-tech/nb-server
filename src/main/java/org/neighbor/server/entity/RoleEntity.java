@@ -11,6 +11,7 @@ public class RoleEntity {
     private Long id;
     @Column(name = "user_id")
     private Long userId;
+    @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
     private RoleEnum userRole;
     @ManyToOne(targetEntity = UserEntity.class, fetch = FetchType.LAZY)
