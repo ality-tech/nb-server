@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface JobTypeRepository extends CrudRepository<JobTypeEntity, Long> {
 
-    JobTypeEntity findByExtId(String id);
+    JobTypeEntity findByExtId(String extId);
 
-    List<JobTypeEntity> findByOrgExtId(String id);
+    List<JobTypeEntity> findByOrgExtId(String orgExtId);
 }

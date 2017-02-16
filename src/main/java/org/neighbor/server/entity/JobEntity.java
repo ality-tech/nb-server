@@ -12,8 +12,6 @@ public class JobEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "category_id")
-    private Long categoryId;
 
     @ManyToOne(targetEntity = JobCategoryEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
@@ -39,13 +37,6 @@ public class JobEntity {
         this.id = id;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
 
     public String getJobUrn() {
         return jobUrn;
@@ -85,7 +76,6 @@ public class JobEntity {
 
     public void setCategory(JobCategoryEntity category) {
         this.category = category;
-        this.categoryId = category.getId();
     }
 
     @Override
@@ -98,7 +88,6 @@ public class JobEntity {
         }
         JobEntity that = (JobEntity) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(categoryId, that.categoryId) &&
                 Objects.equals(jobUrn, that.jobUrn) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(description, that.description) &&
@@ -110,7 +99,6 @@ public class JobEntity {
     public int hashCode() {
         return Objects.hash(
                 id,
-                categoryId,
                 jobUrn,
                 name,
                 description,
@@ -121,7 +109,6 @@ public class JobEntity {
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
-                .add("categoryId", categoryId)
                 .add("jobUrn", jobUrn)
                 .add("name", name)
                 .add("description", description)

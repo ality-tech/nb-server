@@ -12,24 +12,20 @@ public class JobCategoryEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name="ext_id")
+    @Column(name = "ext_id")
     private String extId;
-
-    @Column(name="type_id")
-    private Long typeId;
-
 
     @ManyToOne(targetEntity = JobTypeEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "type_id", insertable = false, updatable = false)
     private JobTypeEntity type;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="description")
+    @Column(name = "description")
     private String description;
 
-    @Column(name="is_enabled")
+    @Column(name = "is_enabled")
     private Boolean isEnabled;
 
     public Long getId() {
@@ -48,14 +44,6 @@ public class JobCategoryEntity {
         this.extId = extId;
     }
 
-    public Long getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Long typeId) {
-        this.typeId = typeId;
-    }
-
     public String getName() {
         return name;
     }
@@ -63,7 +51,6 @@ public class JobCategoryEntity {
     public void setName(String name) {
         this.name = name;
     }
-
 
     public String getDescription() {
         return description;
@@ -88,7 +75,6 @@ public class JobCategoryEntity {
 
     public void setType(JobTypeEntity type) {
         this.type = type;
-        this.typeId=type.getId();
     }
 
     @Override
@@ -102,7 +88,6 @@ public class JobCategoryEntity {
         JobCategoryEntity that = (JobCategoryEntity) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(extId, that.extId) &&
-                Objects.equals(typeId, that.typeId) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(isEnabled, that.isEnabled);
@@ -114,7 +99,6 @@ public class JobCategoryEntity {
         return Objects.hash(
                 id,
                 extId,
-                typeId,
                 name,
                 description,
                 isEnabled);
@@ -125,7 +109,6 @@ public class JobCategoryEntity {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("extId", extId)
-                .add("typeId", typeId)
                 .add("name", name)
                 .add("description", description)
                 .add("isEnabled", isEnabled)

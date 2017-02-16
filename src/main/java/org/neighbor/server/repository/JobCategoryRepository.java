@@ -10,5 +10,5 @@ public interface JobCategoryRepository extends CrudRepository<JobCategoryEntity,
 
     List<JobCategoryEntity> findByType(JobTypeEntity value);
 
-    JobCategoryEntity findByExtId(String id);
+    JobCategoryEntity findByExtId(String extId);
 }
