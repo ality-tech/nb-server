@@ -1,7 +1,7 @@
 package org.neighbor.server.config;
 
-import org.neighbor.server.security.LoggingFilter;
 import org.neighbor.server.security.CustomBasicAuthenticationEntryPoint;
+import org.neighbor.server.security.LoggingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

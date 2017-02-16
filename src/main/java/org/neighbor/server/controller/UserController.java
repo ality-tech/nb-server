@@ -2,6 +2,7 @@ package org.neighbor.server.controller;
 
 import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.user.UserDto;
+import org.neighbor.lib.security.UserAwareController;
 import org.neighbor.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "user")
-public class UserController {
+public class UserController extends UserAwareController {
 
     @Autowired
     private UserService userService;
