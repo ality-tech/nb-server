@@ -2,6 +2,7 @@ package org.neighbor.server.controller;
 
 import org.neighbor.api.GeneralResponse;
 import org.neighbor.api.account.CreateAccountRequest;
+import org.neighbor.lib.security.UserAwareController;
 import org.neighbor.server.entity.AccountEntity;
 import org.neighbor.server.service.AccountService;
 import org.neighbor.server.util.ResponseWrapUtil;
@@ -17,7 +18,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @RequestMapping(value = "/account", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 @ApiIgnore
-public class AccountController {
+public class AccountController extends UserAwareController {
 
     @Autowired
     private AccountService accountService;

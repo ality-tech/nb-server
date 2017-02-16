@@ -2,6 +2,7 @@ package org.neighbor.server.controller;
 
 import org.neighbor.api.*;
 import org.neighbor.api.organizaton.*;
+import org.neighbor.lib.security.UserAwareController;
 import org.neighbor.server.service.OrgService;
 import org.neighbor.server.util.ResponseWrapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/org",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-public class OrgController {
+public class OrgController extends UserAwareController {
 
     @Autowired
     private OrgService orgService;

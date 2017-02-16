@@ -40,13 +40,12 @@ public class UserControllerTest {
         user.setCreatedOn(createdOn);
         user.setPinCode(pinCode);
         user.setUserPhone(USER_PHONE);
-        UserEntity neighborUser = neighborUserRepository.save(user);
+        neighborUserRepository.save(user);
         UserDto userById = userController.getUserById("aaa:111:bbb:ccc:Tester").getBody();
 
         UserDto expectedUserDto = new UserDto();
         expectedUserDto.setLogin(LOGIN_TESTER);
         expectedUserDto.setCreatedOn(createdOn);
-        expectedUserDto.setPinCode(pinCode);
         expectedUserDto.setUserPhone(USER_PHONE);
         Assert.assertEquals(expectedUserDto, userById);
     }

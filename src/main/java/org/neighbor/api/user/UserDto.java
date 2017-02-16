@@ -10,7 +10,6 @@ public class UserDto {
     private String accountId;//account_urn
     private String userUrn;
     private String login;
-    private String pinCode;
     private String userPhone;
     private String activationStatus;
     private Date createdOn;
@@ -38,14 +37,6 @@ public class UserDto {
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public String getPinCode() {
-        return pinCode;
-    }
-
-    public void setPinCode(String pinCode) {
-        this.pinCode = pinCode;
     }
 
     public String getUserPhone() {
@@ -86,7 +77,6 @@ public class UserDto {
                 .add("accountId", accountId)
                 .add("userUrn", userUrn)
                 .add("login", login)
-                .add("pinCode", pinCode)
                 .add("userPhone", userPhone)
                 .add("activationStatus", activationStatus)
                 .add("createdOn", createdOn)
@@ -102,7 +92,6 @@ public class UserDto {
         return Objects.equals(accountId, userDto.accountId) &&
                 Objects.equals(userUrn, userDto.userUrn) &&
                 Objects.equals(login, userDto.login) &&
-                Objects.equals(pinCode, userDto.pinCode) &&
                 Objects.equals(userPhone, userDto.userPhone) &&
                 Objects.equals(activationStatus, userDto.activationStatus) &&
                 Objects.equals(createdOn, userDto.createdOn) &&
@@ -111,6 +100,6 @@ public class UserDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, userUrn, login, pinCode, userPhone, activationStatus, createdOn, updatedOn);
+        return Objects.hash(accountId, userUrn, login, userPhone, activationStatus, createdOn, updatedOn);
     }
 }
